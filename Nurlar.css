@@ -192,22 +192,3 @@ body {
     padding-top: 52px !important;
     overflow-x: hidden !important; /* Yan kaymaları engeller */
 }
-/* Önceki gizleme kodunu kaldırıp bunu ekle */
-@media only screen and (max-width: 600px) {
-  /* Sayfadaki her şeyi görünür yapıyoruz ama fontları küçültüyoruz */
-  * {
-    display: initial !important; /* Eğer bir şeyi 'display: none' ile gizlediysen geri getirir */
-    visibility: visible !important;
-  }
-
-  body {
-    font-size: 9px !important; /* Genel okuma fontu */
-  }
-
-  /* Sayfa numarası, irtibat gibi "görülse yeter" dediğin yerler */
-  .sayfa-numarasi, .irtibat-bilgisi, .alt-bilgi {
-    font-size: 8px !important;
-    line-height: 1.1; /* Satır arasını daraltıp dikeyde yer kazandırır */
-    letter-spacing: -0.3px; /* Harfleri birbirine yaklaştırıp yatayda yer kazandırır */
-  }
-}
