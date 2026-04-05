@@ -172,3 +172,23 @@ body { padding-top: 60px !important; }
 }
 
 .zincir-parca:last-child::after { content: ""; }
+/* --- MOBİLDE BARI EKRANA ÇİVİLEME AYARI (EN ALTA EKLE) --- */
+.ust-panel {
+    position: fixed !important; /* Ekrana sabitler */
+    top: 0 !important;         /* En tepeye yapıştırır */
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 100000 !important; /* Her şeyin üstünde durmasını sağlar */
+    display: flex !important;
+    background-color: #1f2937 !important;
+    height: 52px !important;
+    /* Bazı telefonlarda barın kaymasını engellemek için: */
+    transform: translateZ(0); 
+    -webkit-transform: translateZ(0);
+}
+
+/* Sayfa içeriğinin barın altında kalmaması için */
+body {
+    padding-top: 52px !important;
+    overflow-x: hidden !important; /* Yan kaymaları engeller */
+}
