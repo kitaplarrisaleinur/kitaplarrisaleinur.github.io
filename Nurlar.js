@@ -86,3 +86,5 @@ window.addEventListener('load', barGuncelle);
 
 // Detaylara tıklandığında barı tazele
 document.addEventListener('click', () => setTimeout(barGuncelle, 200));
+
+function aramaYardimi() { alert('CTRL ve F tuşuna basın. Veya Sağdaki üç noktaya basın orada bul butonunu bulup arama yapabilirsiniz'); }
