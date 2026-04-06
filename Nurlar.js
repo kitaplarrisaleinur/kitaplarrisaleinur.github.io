@@ -13,9 +13,14 @@ function hepsiniKapat() {
     // Kapandıktan sonra barı sıfırla
     setTimeout(barGuncelle, 500);
 }
+function arama() { 
+    alert('CTRL ve F tuşuna basın veya Sağdaki üç noktaya basın orada bul butonunu bulup arama yapabilirsiniz'); 
+}
+
+
 
 function yardimAc() {
-    alert("︾: Tüm başlıkları açar.\n︽: Hepsini kapatır ve en üste çıkar.\nÜst Bar: Okuduğunuz sayfa ve konuyu anlık gösterir.");
+    alert("Arama yapmak için CTRL+F tuşlarına basın. Veya sağ üstteki üç noktayı açın ");
 }
 
 /* --- AKILLI RADAR VE HİYERARŞİ SİSTEMİ (PERFORMANS ODAKLI) --- */
@@ -87,4 +92,3 @@ window.addEventListener('load', barGuncelle);
 // Detaylara tıklandığında barı tazele
 document.addEventListener('click', () => setTimeout(barGuncelle, 200));
 
-function aramaYardimi() { alert('CTRL ve F tuşuna basın. Veya Sağdaki üç noktaya basın orada bul butonunu bulup arama yapabilirsiniz'); }
