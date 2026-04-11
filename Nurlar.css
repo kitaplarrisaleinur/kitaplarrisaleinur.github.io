@@ -1,7 +1,8 @@
 /* 1. TÜM BOŞLUKLARI VE TAŞMALARI KÖKTEN SIFIRLA */
 * {
     box-sizing: border-box;
-   
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 html, body {
@@ -191,6 +192,3 @@ body {
     padding-top: 52px !important;
     overflow-x: hidden !important; /* Yan kaymaları engeller */
 }
-/* Sadece bu 3 satırı en alta ekle, çizgilerine dokunmaz */
-html, body { overflow: hidden !important; height: 100% !important; }
-body { position: fixed !important; overflow-y: scroll !important; -webkit-overflow-scrolling: touch; }
