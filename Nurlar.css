@@ -111,10 +111,9 @@ summary::-webkit-details-marker { display: none !important; }
     gap: 8px !important;
     align-items: center !important;
     justify-content: space-between !important;
-    
-    /* ADRES ÇUBUĞUNU ÇIKARAN KRİTİK KODLAR */
-    position: relative !important; /* FIXED VEYA STICKY YAPMA, RELATIVE YAP */
-    width: 100% !important;
+    position: sticky  !important;
+    top: 0 !important;
+    width: 100% !important; /* Laptop ekranını tam kaplasın */
     z-index: 10000 !important;
     height: 60px !important;
 }
