@@ -115,7 +115,7 @@ summary::-webkit-details-marker { display: none !important; }
     height: 60px !important;
 }
 
-body { padding-top: 60px !important; }
+body { padding-top: 0 !important; }
 
 .panel-eleman {
     background-color: #4b5563 !important;
