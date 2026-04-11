@@ -108,7 +108,7 @@ summary::-webkit-details-marker { display: none !important; }
     gap: 8px !important;
     align-items: center !important;
     justify-content: space-between !important;
-    position: fixed !important;
+    position: sticky  !important;
     top: 0 !important;
     width: 100% !important; /* Laptop ekranını tam kaplasın */
     z-index: 10000 !important;
