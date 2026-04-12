@@ -1,15 +1,15 @@
 /* 1. TÜM BOŞLUKLARI VE TAŞMALARI KÖKTEN SIFIRLA */
 * {
     box-sizing: border-box;
-    margin: 0 !important;
-    padding: 0 !important;
 }
 
 html, body {
     width: 100% !important; /* Laptop ekranına boydan boya yayılsın */
     background-color: #6b7280; 
 }
-
+html {
+    height: auto;
+}
 /* 2. KİTAP KILIFLARI GENEL AYARLARI */
 details {
     display: block !important;
@@ -98,8 +98,13 @@ summary::-webkit-details-marker { display: none !important; }
     height: 60px !important;
 }
 
-body { padding-top: 60px !important; }
-
+body {
+    margin: 0;
+    padding-top: 60px;
+}
+body {
+    overflow-x: hidden;
+}
 .panel-eleman {
     background-color: #4b5563 !important;
     color: white !important;
