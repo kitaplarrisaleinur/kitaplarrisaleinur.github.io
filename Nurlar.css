@@ -1,26 +1,17 @@
-/* 1. TEMEL SIFIRLAMA VE PERFORMANS KİLİDİ */
+/* 1. TÜM BOŞLUKLARI VE TAŞMALARI KÖKTEN SIFIRLA */
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important; /* Genel satır yüksekliğini daralttık */
 }
 
 html, body {
-    /* ADRES ÇUBUĞU DÜZELTMESİ: 100% zorlaması yerine doğal akış */
-    height: auto !important;
-    min-height: 101vh; /* Hafif taşma adres çubuğunu görünür yapar */
+    width: 100% !important;
     background-color: #6b7280; 
-    overflow-x: hidden; 
-    -webkit-text-size-adjust: 100%;
 }
 
-/* 6800 SAYFA HIZLANDIRICI: Ekran dışındaki içerikleri tarayıcıya hesaplatmaz */
-.sayfa, .arabi, details {
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 500px; /* Hayalet yükseklik vererek kaydırmayı stabilize eder */
-}
-
-/* 2. KİTAP KILIFLARI */
+/* 2. KİTAP KILIFLARI GENEL AYARLARI */
 details {
     display: block !important;
     width: 100% !important;
@@ -37,43 +28,37 @@ summary {
     text-align: center;
     list-style: none;
     cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+    /* BOŞLUĞU ÖLDÜREN AYARLAR */
+    padding: 8px 0 !important; 
+    min-height: 0 !important;
 }
 
-/* GRİ GEÇİŞLERİ */
-details > summary { background: #6b7280 !important; color: #ffffff !important; padding: 12px 4px !important; }
-details > details > summary { background: #9ca3af !important; color: #ffffff !important; padding: 10px 4px !important; }
-details > details > details > summary { background: #d1d5db !important; color: #111827 !important; padding: 8px 4px !important; }
-details > details > details > details > summary { background: #e5e7eb !important; color: #111827 !important; padding: 8px 4px !important; }
-details > details > details > details > details > summary { background: #f3f4f6 !important; color: #111827 !important; padding: 8px 4px !important; }
+/* --- GRİ GEÇİŞLERİ (DARALTILMIŞ) --- */
+details > summary { background: #6b7280 !important; color: #ffffff !important; }
+details > details > summary { background: #9ca3af !important; color: #ffffff !important; }
+details > details > details > summary { background: #d1d5db !important; color: #111827 !important; }
+details > details > details > details > summary { background: #e5e7eb !important; color: #111827 !important; }
+details > details > details > details > details > summary { background: #f3f4f6 !important; color: #111827 !important; }
 
-/* 3. METİN AYARLARI */
+/* 3. ARAPÇA METİN AYARLARI */
 .arabi {
     display: block !important;
-    line-height: 2 !important;
-    width: 100% !important;
-    padding: 15px 5px !important;
     text-align: center;
     direction: rtl;
     font-family: 'Amiri', serif !important;
     font-size: 1.5rem;
     background: #f9fafb !important;
+    padding: 10px 5px !important;
+    line-height: 1.8 !important; /* Arapça için biraz ferahlık */
 }
 
+/* 4. İÇERİK YAZILARI */
 details {
     font-family: 'Arimo', sans-serif !important;
     font-size: 1.3rem !important;
     text-align: center;
     background: #f9fafb !important;
     color: #111827 !important;
-}
-
-.elifler, .lahika, .sayfa {
-    display: block !important;
-    text-align: center !important;
-    padding: 5px 0 !important;
-    font-size: 0.85rem;
-    background: #f9fafb !important; 
 }
 
 .sayfa::before {
@@ -85,67 +70,97 @@ details {
     margin: 5px auto !important;
 }
 
-/* 4. ÜST PANEL - SABİT */
+summary::-webkit-details-marker { display: none !important; }
+
+/* 5. ÜST PANEL VE BEYAZ ŞERİT DÜZENİ */
 .ust-panel {
+    position: fixed !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 100000 !important;
     display: flex !important;
     background-color: #1f2937 !important;
-    padding: 10px !important;
-    gap: 8px !important;
+    height: 52px !important;
     align-items: center !important;
-    position: fixed !important; /* Panel yerinde çakılı kalır */
-    top: 0 !important;
-    left: 0;
-    width: 100% !important;
-    z-index: 10000 !important;
-    height: 60px !important;
 }
 
-body { padding-top: 60px !important; }
+body { padding-top: 52px !important; }
 
-.panel-eleman {
-    background-color: #4b5563 !important;
+/* ============================================================
+   SAĞ ALT BUTON (ÜÇ ÇİZGİ)
+   ============================================================ */
+#gezer-buton {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 75px !important;
+    height: 75px !important;
+    background: #007bff !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 100000 !important;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4) !important;
+    border: 3px solid white !important;
+}
+
+#gezer-buton::before {
+    content: "☰" !important;
+    font-size: 40px !important;
     color: white !important;
+    font-family: sans-serif !important;
+}
+
+.arti-v, .arti-h { display: none !important; }
+
+/* ============================================================
+   ORTA PANEL AYARLARI
+   ============================================================ */
+#orta-kontrol-paneli {
+    display: none; 
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0,0,0,0.85) !important;
+    z-index: 200000 !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.panel-kutu {
+    background: white !important;
+    padding: 40px 25px !important;
+    border-radius: 25px !important;
+    width: 90% !important;
+    max-width: 500px !important;
+    text-align: center !important;
+    position: relative !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
+}
+
+.dev-buton {
+    width: 100% !important;
+    height: 90px !important; 
+    margin-bottom: 20px !important;
     border: none !important;
-    padding: 8px 15px !important;
-    border-radius: 6px !important;
-    font-size: 1.1rem !important;
+    border-radius: 15px !important;
+    font-size: 1.6rem !important;
+    font-weight: bold !important;
     cursor: pointer;
 }
 
-.panel-bilgi-seridi {
-    flex: 1 !important;
-    margin: 0 10px !important;
-    background-color: #ffffff !important;
-    height: 44px !important; 
-    border-radius: 6px !important;
-    position: relative !important;
-    overflow: hidden !important;
-    display: flex !important;
-    align-items: center !important;
-    border: 2px solid #374151 !important;
-}
+.btn-yesil { background: #28a745 !important; color: white !important; }
+.btn-kirmizi { background: #dc3545 !important; color: white !important; }
 
-#durum-cubugu-doluluk {
-    position: absolute;
-    left: 0; top: 0; height: 100%; width: 0%;
-    background-color: #4ade80 !important;
-    opacity: 0.3;
-}
-
-#bar-sayfa-metni {
+.arama-notu {
+    background: #f1f5f9 !important;
+    padding: 20px !important;
+    border-radius: 15px !important;
+    border: 2px dashed #64748b !important;
+    color: #334155 !important;
     font-size: 1.1rem !important;
-    font-weight: 900 !important;
-    color: #b91c1c !important; 
-    margin-right: 10px !important;
-    padding-right: 8px;
-    border-right: 2px solid #eee;
-    white-space: nowrap;
 }
-
-#baslik-zinciri {
-    display: flex; gap: 6px; overflow: hidden; white-space: nowrap; 
-    font-size: 1rem !important; font-weight: 800 !important;
-    color: #000;
-}
-
-.zincir-parca::after { content: " >"; color: #999; margin-left: 6px; }
