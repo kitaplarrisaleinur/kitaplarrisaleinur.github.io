@@ -1,0 +1,122 @@
+html, body {
+    width: 100%;
+  }
+ 
+/* 3. ARAPÇA METİN AYARLARI */
+.arabi {
+    display: block !important;
+    margin-top: 0 !important;
+    line-height: 2 !important;
+    width: 100% !important;
+    padding: 13px 5px 0.5px 5px !important;
+    text-align: center;
+    direction: rtl;
+    font-family: 'Amiri', serif !important;
+    font-size: 1.5rem;
+    background: #f9fafb !important;
+}
+
+elifler, .lahika, .sayfa {
+    display: block !important;
+    text-align: center !important;
+    padding: 5px 0 5px !important;
+    font-size: 0.85rem;
+    color: #374151;
+    background: #f9fafb !important; 
+}
+
+summary {
+    display: block !important;
+    width: 100% !important;
+    font-family: 'Arimo', sans-serif !important;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-align: center;
+    list-style: none;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+}
+
+/* --- GRİ GEÇİŞLERİ --- */
+details > summary { background: #6b7280 !important; color: #ffffff !important; padding: 5px 4px !important; }
+details > details > summary { background: #9ca3af !important; color: #ffffff !important; padding: 4px 4px !important; }
+details > details > details > summary { background: #d1d5db !important; color: #111827 !important; padding: 4px 4px !important; }
+details > details > details > details > summary { background: #e5e7eb !important; color: #111827 !important; padding: 4px 4px !important; }
+details > details > details > details > details > summary { background: #f3f4f6 !important; color: #111827 !important; padding: 4px 4px !important; }
+
+details {
+    /* Senin yazı ve renk ayarların */
+    font-family: 'Arimo', sans-serif !important;
+    font-size: 1.3rem !important;
+    line-height: 1.3;
+    text-align: center;
+    color: #111827 !important;
+    background: #f9fafb !important;
+
+    /* Senin genişlik ve çerçeve ayarların */
+    display: block !important;
+    width: 100% !important;
+    border: none !important;
+}
+
+
+
+
+
+ /* Sağ alttaki yuvarlak tetikleyici buton */
+        .floating-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        /* Ortada açılan kontrol paneli */
+        #controlBox {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            z-index: 1001;
+            width: 280px;
+            text-align: center;
+        }
+
+        .btn-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .expand-all { background: #28a745; } /* Hepsini Aç */
+        .shrink-all { background: #ffc107; color: #333; } /* Hepsini Kapat */
+        .close-panel { background: #dc3545; margin-top: 10px; } /* Paneli Kapat */
+
+        /* Mobilde butonları daha büyük yap */
+        @media (max-width: 600px) {
+            #controlBox { width: 85%; }
+        }
