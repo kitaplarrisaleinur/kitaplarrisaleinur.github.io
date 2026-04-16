@@ -1,6 +1,8 @@
-html, body {
+body, html {
+    overflow-x: hidden;
     width: 100%;
-  }
+}
+
  
 /* 3. ARAPÇA METİN AYARLARI */
 .arabi {
@@ -119,4 +121,7 @@ details {
         /* Mobilde butonları daha büyük yap */
         @media (max-width: 600px) {
             #controlBox { width: 85%; }
+        }
+        .arabi4{
+            font-family: Amiri;
         }

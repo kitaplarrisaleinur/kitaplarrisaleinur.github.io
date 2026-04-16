@@ -13,3 +13,5 @@
                 detail.open = isOpen; // Hepsini açar (true) veya kapatır (false)
             });
         }
+
+        
