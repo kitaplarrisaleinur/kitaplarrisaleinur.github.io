@@ -1,0 +1,154 @@
+/* ============================================================
+   1. GENEL AYARLAR (Tüm Sayfalar İçin)
+   ============================================================ */
+* {
+    box-sizing: border-box; /* Padding ve border genişliği bozmaz */
+    -webkit-tap-highlight-color: transparent; /* Mobilde tıklama gölgesini kaldırır */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafb; /* Hafif gri, göz yormayan arka plan */
+    color: #111827; /* Okunabilir koyu gri metin */
+    font-family: 'Arimo', sans-serif; /* Türkçe metinler için Google Font */
+    line-height: 1.6;
+}
+
+/* ============================================================
+   2. ANA SAYFA KÜTÜPHANE TASARIMI (Kitap Kartları)
+   ============================================================ */
+.ana-baslik {
+    text-align: center;
+    padding: 30px 10px;
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.kitap-galerisi {
+    display: grid;
+    /* Mobilde sığmazsa alt alta, sığarsa yan yana dizilme ayarı */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.kitap-kart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-left: 6px solid #6b7280; /* Sol tarafa şık kalın çizgi */
+    border-radius: 10px;
+    padding: 20px;
+    text-decoration: none; /* Link alt çizgisini kaldırır */
+    color: #111827;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: 0.2s ease; /* Fareyle üzerine gelince yumuşak geçiş */
+    min-height: 90px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Kartın üzerine gelince veya tıklayınca olacaklar */
+.kitap-kart:hover, .kitap-kart:active {
+    background: #6b7280;
+    color: white !important;
+    transform: translateY(-3px); /* Hafif yukarı kalkma efekti */
+}
+
+/* ============================================================
+   3. KİTAP İÇERİĞİ (Details/Summary ve Yazı Ayarları)
+   ============================================================ */
+
+/* Başlık kutuları */
+summary {
+    display: block;
+    padding: 15px;
+    background-color: #6b7280;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* İç içe açılan alt başlıkların renklerini biraz açıyoruz 
+details > details > summary { background-color: #9ca3af; }
+details > details > details > summary { background-color: #d1d5db; color: #111; }*/
+
+
+
+/* GRİ GEÇİŞLERİ - Renklerine dokunmadım */
+details > summary { background: #6b7280 !important; color: #ffffff !important; padding: 5px 4px !important; }
+details > details > summary { background: #9ca3af !important; color: #ffffff !important; padding: 4px 4px !important; }
+details > details > details > summary { background: #d1d5db !important; color: #111827 !important; padding: 4px 4px !important; }
+details > details > details > details > summary { background: #e5e7eb !important; color: #111827 !important; padding: 4px 4px !important; }
+details > details > details > details > details > summary { background: #f3f4f6 !important; color: #111827 !important; padding: 4px 4px !important; }
+
+
+
+
+
+/* Okunabilir kitap sayfası alanı */
+details {
+    font-family: 'Arimo', sans-serif !important;
+    font-size: 1.3rem !important;
+    line-height: 1.3;
+    text-align: center;
+    color: #111827 !important;
+    background: #f9fafb !important;
+    display: block !important;
+    width: 100% !important;
+    border: none !important;
+    overflow-x: hidden; /* İçeriden dışarı taşmayı önler */
+}
+
+/* --- KRİTİK DÜZELTME: Yan yana binmeyi engelleyen bloklar --- */
+.sayfa, .arabi {
+    display: block !important; /* Her biri kendi satırını kaplar */
+    width: 100% !important;
+    text-align: center;
+}
+
+/* Sayfa Numarası Stili */
+.sayfa {
+    background: #f3f4f6;
+    color: #6b7280;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Arapça Metin Stili (Özel Fontlarla) */
+.arabi {
+     display: block !important;
+    margin-top: 0 !important;
+    line-height: 2 !important;
+    width: 100% !important;
+    padding: 13px 5px 0.5px 5px !important;
+    text-align: center;
+    direction: rtl;
+    font-family: 'Amiri', serif !important;
+    font-size: 1.5rem;
+    background: #f9fafb !important;
+    word-wrap: break-word; /* Uzun kelimeleri böler */
+}
+
+/* ============================================================
+   4. MOBİL UYUM (Küçük Ekranlar İçin)
+   ============================================================ */
+@media (max-width: 600px) {
+    .kitap-galerisi {
+        /* Mobilde kartları yan yana 2 tane olacak şekilde zorlar */
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .ana-baslik { font-size: 1.4rem; }
+    .arabi { font-size: 1.5rem; }
+}

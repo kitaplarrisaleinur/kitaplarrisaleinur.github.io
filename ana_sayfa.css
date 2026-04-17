@@ -1,0 +1,29 @@
+/* --- MİNİMAL LİSTE TASARIMI (GÜNCELLENDİ) --- */
+.kitap-galerisi { 
+    display: flex; 
+    flex-direction: column; /* Öğeleri alt alta dizer */
+    align-items: stretch; /* Kartların genişliğini eşitler */
+    gap: 5px; /* Satır arasındaki boşluk */
+    padding: 20px;
+    max-width: 600px; /* Liste görünümü için genişliği biraz daralttım */
+    margin: 0 auto;
+}
+
+.kitap-kart { 
+    display: block; /* Tam satır kaplamasını sağlar */
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #d1d5db;
+    text-decoration: none;
+    color: #4b5563;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.kitap-kart:hover { 
+    color: #2563eb;
+    border-bottom: 1px solid #2563eb;
+    background: #f8fafc; /* Daha zarif bir gri-mavi tonu */
+    padding-left: 20px; /* Üzerine gelince hafif sağa kayma efekti (isteğe bağlı) */
+}
