@@ -4,22 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Risale-i Nur Kütüphanesi</title>
-<!-- Google Fonts üzerinden Amiri ve Scheherazade New yükleme -->
- 
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Arimo:ital,wght@0,400..700;1,400..700&family=Scheherazade+New:wght@400;500;600;700&display=swap" rel="stylesheet">
- 
 
-
-    <!-- Tek kaynak, tek dosya: yeni.css -->
+    <!-- Google Font bağlantıları silindi, artık fontları ana_sayfa.css içinden yerel (fonts/...) olarak çekiyoruz -->
     <link rel="stylesheet" href="ana_sayfa.css">
 </head>
 <body>
 
-    <div class="ana-baslik">📚 Risale-i Nur Kütüphanesi</div>
+    <!-- Erişilebilirlik puanı için div yerine h1 kullandık -->
+    <h1 class="ana-baslik">📚 Risale-i Nur Kütüphanesi</h1>
 
-    <div class="kitap-galerisi">
+    <nav class="kitap-galerisi">
         <a href="sozler.html" class="kitap-kart">1. Sözler</a>
         <a href="mektubat1.html" class="kitap-kart">2. Mektubat 1</a>
         <a href="mektubat2.html" class="kitap-kart">3. Mektubat 2</a>
@@ -42,8 +36,8 @@
         <a href="hanimlar.html" class="kitap-kart">20. Hanımlar Rehberi</a>
         <a href="genclik.html" class="kitap-kart">21. Gençlik Rehberi</a>
         <a href="muhakemat.html" class="kitap-kart">22. Muhakemat</a>
-         <a href="nurunilkkapisi.html" class="kitap-kart">23. Nurun İlk Kapısı</a>
-    </div>
+        <a href="nurunilkkapisi.html" class="kitap-kart">23. Nurun İlk Kapısı</a>
+    </nav>
 
 </body>
 </html>

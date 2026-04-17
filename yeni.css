@@ -1,22 +1,49 @@
 /* ============================================================
-   1. GENEL AYARLAR (Tüm Sayfalar İçin)
+   0. FONTLARI BAĞLIYORUZ (Klasörden Okuma)
+   ============================================================ */
+@font-face {
+    font-family: 'Amiri';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/amiri-v30-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Arimo';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/arimo-v35-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Scheherazade New';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/scheherazade-new-v20-latin-regular.woff2') format('woff2');
+}
+
+/* ============================================================
+   1. GENEL AYARLAR
    ============================================================ */
 * {
-    box-sizing: border-box; /* Padding ve border genişliği bozmaz */
-    -webkit-tap-highlight-color: transparent; /* Mobilde tıklama gölgesini kaldırır */
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     margin: 0;
     padding: 0;
-    background-color: #f9fafb; /* Hafif gri, göz yormayan arka plan */
-    color: #111827; /* Okunabilir koyu gri metin */
-    font-family: 'Arimo', sans-serif; /* Türkçe metinler için Google Font */
+    background-color: #f9fafb;
+    color: #111827;
+    font-family: 'Arimo', sans-serif;
     line-height: 1.6;
 }
 
 /* ============================================================
-   2. ANA SAYFA KÜTÜPHANE TASARIMI (Kitap Kartları)
+   2. ANA SAYFA KÜTÜPHANE TASARIMI
    ============================================================ */
 .ana-baslik {
     text-align: center;
@@ -27,7 +54,6 @@ body {
 
 .kitap-galerisi {
     display: grid;
-    /* Mobilde sığmazsa alt alta, sığarsa yan yana dizilme ayarı */
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 15px;
     padding: 20px;
@@ -40,30 +66,27 @@ body {
     align-items: center;
     justify-content: center;
     background: #ffffff;
-    border-left: 6px solid #6b7280; /* Sol tarafa şık kalın çizgi */
+    border-left: 6px solid #6b7280;
     border-radius: 10px;
     padding: 20px;
-    text-decoration: none; /* Link alt çizgisini kaldırır */
+    text-decoration: none;
     color: #111827;
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    transition: 0.2s ease; /* Fareyle üzerine gelince yumuşak geçiş */
+    transition: 0.2s ease;
     min-height: 90px;
     border: 1px solid #e5e7eb;
 }
 
-/* Kartın üzerine gelince veya tıklayınca olacaklar */
 .kitap-kart:hover, .kitap-kart:active {
     background: #6b7280;
     color: white !important;
-    transform: translateY(-3px); /* Hafif yukarı kalkma efekti */
+    transform: translateY(-3px);
 }
 
 /* ============================================================
-   3. KİTAP İÇERİĞİ (Details/Summary ve Yazı Ayarları)
+   3. KİTAP İÇERİĞİ
    ============================================================ */
-
-/* Başlık kutuları */
 summary {
     display: block;
     padding: 15px;
@@ -75,24 +98,13 @@ summary {
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-/* İç içe açılan alt başlıkların renklerini biraz açıyoruz 
-details > details > summary { background-color: #9ca3af; }
-details > details > details > summary { background-color: #d1d5db; color: #111; }*/
-
-
-
-/* GRİ GEÇİŞLERİ - Renklerine dokunmadım */
+/* GRİ GEÇİŞLERİ */
 details > summary { background: #6b7280 !important; color: #ffffff !important; padding: 5px 4px !important; }
 details > details > summary { background: #9ca3af !important; color: #ffffff !important; padding: 4px 4px !important; }
 details > details > details > summary { background: #d1d5db !important; color: #111827 !important; padding: 4px 4px !important; }
 details > details > details > details > summary { background: #e5e7eb !important; color: #111827 !important; padding: 4px 4px !important; }
 details > details > details > details > details > summary { background: #f3f4f6 !important; color: #111827 !important; padding: 4px 4px !important; }
 
-
-
-
-
-/* Okunabilir kitap sayfası alanı */
 details {
     font-family: 'Arimo', sans-serif !important;
     font-size: 1.3rem !important;
@@ -103,17 +115,15 @@ details {
     display: block !important;
     width: 100% !important;
     border: none !important;
-    overflow-x: hidden; /* İçeriden dışarı taşmayı önler */
+    overflow-x: hidden;
 }
 
-/* --- KRİTİK DÜZELTME: Yan yana binmeyi engelleyen bloklar --- */
 .sayfa, .arabi {
-    display: block !important; /* Her biri kendi satırını kaplar */
+    display: block !important;
     width: 100% !important;
     text-align: center;
 }
 
-/* Sayfa Numarası Stili */
 .sayfa {
     background: #f3f4f6;
     color: #6b7280;
@@ -123,9 +133,9 @@ details {
     letter-spacing: 1px;
 }
 
-/* Arapça Metin Stili (Özel Fontlarla) */
+/* ARAPÇA METİN (Senin ince ayarlarınla) */
 .arabi {
-     display: block !important;
+    display: block !important;
     margin-top: 0 !important;
     line-height: 2 !important;
     width: 100% !important;
@@ -135,20 +145,18 @@ details {
     font-family: 'Amiri', serif !important;
     font-size: 1.5rem;
     background: #f9fafb !important;
-    word-wrap: break-word; /* Uzun kelimeleri böler */
+    word-wrap: break-word;
 }
 
 /* ============================================================
-   4. MOBİL UYUM (Küçük Ekranlar İçin)
+   4. MOBİL UYUM
    ============================================================ */
 @media (max-width: 600px) {
     .kitap-galerisi {
-        /* Mobilde kartları yan yana 2 tane olacak şekilde zorlar */
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
         padding: 10px;
     }
-    
     .ana-baslik { font-size: 1.4rem; }
     .arabi { font-size: 1.5rem; }
 }
