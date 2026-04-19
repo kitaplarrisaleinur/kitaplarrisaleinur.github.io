@@ -2,92 +2,83 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Külliyat Arama</title>
+    <script src="fihrist.js"></script> 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f8f9fa; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: sans-serif; background: #f0f0f0; margin: 0; padding: 0; text-align: center; }
+        .ust-panel { position: sticky; top: 0; background: #2c3e50; padding: 20px 15px; color: white; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        input { width: 90%; max-width: 400px; padding: 15px; font-size: 20px; border: none; border-radius: 30px; outline: none; text-align: center; }
+        .toplam-skor { font-size: 24px; font-weight: bold; margin-top: 15px; color: #f1c40f; }
+        #sonuclar { padding: 15px; display: inline-block; width: 100%; box-sizing: border-box; }
         
-        .arama-konteyner { 
-            width: 100%; max-width: 500px; text-align: center; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; 
+        /* Satıra tıklama efekti ekledik */
+        .satir { 
+            background: white; width: 95%; max-width: 500px; margin: 5px auto; 
+            padding: 15px; border-radius: 10px; display: flex; 
+            justify-content: center; align-items: center; cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 18px;
+            transition: background 0.2s;
         }
+        .satir:hover { background: #eef6ff; } /* Üstüne gelince hafif renk değişir */
         
-        .toplam-alan { 
-            font-size: 19px; font-weight: bold; color: #d93025; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 2px solid #f8f9fa;
-        }
-        
-        .input-grubu { display: flex; gap: 10px; justify-content: center; align-items: center; }
-        
-        .arama-kutu { padding: 10px 15px; width: 70%; font-size: 15px; border: 1px solid #dfe1e5; border-radius: 20px; outline: none; }
-        
-        .ara-btn { padding: 10px 20px; font-size: 14px; cursor: pointer; font-weight: bold; background: #1a73e8; color: white; border: none; border-radius: 20px; }
-
-        #sonuclar { width: 100%; max-width: 500px; background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .kitap-satir { display: flex; justify-content: space-between; padding: 8px 15px; border-bottom: 1px solid #f8f9fa; align-items: center; }
-        .kitap-link { text-decoration: none; color: #1a0dab; font-size: 15px; font-weight: 500; flex-grow: 1; }
-        .rakam { background: #f1f3f4; color: #3c4043; padding: 2px 8px; border-radius: 10px; font-weight: bold; font-size: 12px; }
+        .kitap-adi { font-weight: bold; color: #333; }
+        .adet { margin-left: 10px; color: #2980b9; font-weight: bold; }
+        .sifir { margin-left: 10px; color: #bdc3c7; }
     </style>
 </head>
 <body>
 
-    <div class="arama-konteyner">
-        <div id="toplamGosterge" class="toplam-alan">TOPLAM BULUNAN: 0</div>
-        
-        <div class="input-grubu">
-            <input type="text" id="kelimeInput" class="arama-kutu" placeholder="Aranacak kelime..." autocomplete="off">
-            <button onclick="kulliyatAra()" class="ara-btn">ARA</button>
-        </div>
-    </div>
+<div class="ust-panel">
+    <input type="text" id="arama" placeholder="Kelimeni yaz abi..." oninput="ara()" autofocus>
+    <div id="toplam" class="toplam-skor">Toplam: 0</div>
+</div>
 
-    <div id="sonuclar"></div>
+<div id="sonuclar"></div>
 
 <script>
-    const kitaplar = [
-        {no: "1.", ad: "Sözler", dosya: "sozler.html"}, {no: "2.", ad: "Mektubat 1", dosya: "mektubat1.html"},
-        {no: "3.", ad: "Mektubat 2", dosya: "mektubat2.html"}, {no: "4.", ad: "Lem'alar", dosya: "lemalar.html"},
-        {no: "5.", ad: "Şualar 1", dosya: "sualar1.html"}, {no: "6.", ad: "Şualar 2", dosya: "sualar2.html"},
-        {no: "7.", ad: "Sıracın Nur", dosya: "siracunnur.html"}, {no: "8.", ad: "Zülfikar", dosya: "zulfikar.html"},
-        {no: "9.", ad: "Asayı Musa", dosya: "asayimusa.html"}, {no: "10.", ad: "Tılsımlar", dosya: "tilsimlar.html"},
-        {no: "11.", ad: "İşaratül İcaz", dosya: "isaratulicaz.html"}, {no: "12.", ad: "Mesnevi Nuriye", dosya: "mesnevinuriye.html"},
-        {no: "13.", ad: "ST Gaybi", dosya: "stgaybi.html"}, {no: "14.", ad: "Barla", dosya: "barla.html"},
-        {no: "15.", ad: "Kastamonu", dosya: "kastamonu.html"}, {no: "16.", ad: "Emirdağ 1", dosya: "emirdag1.html"},
-        {no: "17.", ad: "Emirdağ 2", dosya: "emirdag2.html"}, {no: "18.", ad: "Emirdağ 3", dosya: "emirdag3.html"},
-        {no: "19.", ad: "Emirdağ 4", dosya: "emirdag4.html"}, {no: "20.", ad: "Hanımlar Rehberi", dosya: "hanimlar.html"},
-        {no: "21.", ad: "Gençlik Rehberi", dosya: "genclik.html"}, {no: "22.", ad: "Muhakemat", dosya: "muhakemat.html"},
-        {no: "23.", ad: "Nurun İlk Kapısı", dosya: "nurunilkkapisi.html"}
-    ];
+const kitaplar = [
+    "sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html",
+    "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html",
+    "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html",
+    "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html",
+    "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html",
+    "genclik.html", "muhakemat.html", "nurunilkkapisi.html"
+];
 
-    function turkceKucuk(str) { return str.replace(/İ/g, "i").replace(/I/g, "ı").toLowerCase(); }
+function ara() {
+    let kelime = document.getElementById('arama').value.toLowerCase().trim();
+    let divSonuc = document.getElementById('sonuclar');
+    let divToplam = document.getElementById('toplam');
+    
+    divSonuc.innerHTML = "";
+    let genelToplam = 0;
 
-    async function kulliyatAra() {
-        const aranan = document.getElementById('kelimeInput').value;
-        if(!aranan) return;
-
-        let genelToplam = 0;
-        let html = "";
-        const sonucDiv = document.getElementById('sonuclar');
-        const toplamBaslik = document.getElementById('toplamGosterge');
-
-        for (let kitap of kitaplar) {
-            // BURASI ÖNEMLİ: Tarama yaparken kitap ismini yukarıda gösteriyoruz
-            toplamBaslik.innerText = "TARANIYOR: " + kitap.ad;
-            
-            try {
-                const res = await fetch(kitap.dosya);
-                const metin = await res.text();
-                const regex = new RegExp(turkceKucuk(aranan), 'g');
-                const adet = (turkceKucuk(metin).match(regex) || []).length;
-                genelToplam += adet;
-
-                html += `<div class="kitap-satir">
-                    <a class="kitap-link" href="${kitap.dosya}?ara=${encodeURIComponent(aranan)}">${kitap.no} ${kitap.ad}</a>
-                    <span class="rakam">${adet}</span>
-                </div>`;
-                
-                // Arayüzün donmaması ve ismin görünmesi için küçük bir mola
-                sonucDiv.innerHTML = html; 
-            } catch (e) { console.error(kitap.ad + " hatası."); }
-        }
-        toplamBaslik.innerText = "TOPLAM BULUNAN: " + genelToplam;
+    if (kelime.length < 2) {
+        divToplam.innerText = "Toplam: 0";
+        return;
     }
+
+    let bulunanlar = (typeof fihrist !== 'undefined') ? (fihrist[kelime] || {}) : {};
+
+    kitaplar.forEach(kitap => {
+        let adet = bulunanlar[kitap] || 0;
+        genelToplam += adet;
+        
+        let stil = (adet > 0) ? "adet" : "sifir";
+        let temizAd = kitap.replace(".html", "").toUpperCase();
+        
+        // --- İŞTE BURASI DEĞİŞTİ: TIKLAYINCA KİTABIN İÇİNE GÖNDERİYOR ---
+        divSonuc.innerHTML += `
+            <div class="satir" onclick="window.location.href='${kitap}?ara=${encodeURIComponent(kelime)}'">
+                <span class="kitap-adi">${temizAd}</span>
+                <span class="${stil}">(${adet})</span>
+            </div>`;
+    });
+
+    divToplam.innerText = `Toplam Bulunan: ${genelToplam}`;
+}
 </script>
+
 </body>
 </html>

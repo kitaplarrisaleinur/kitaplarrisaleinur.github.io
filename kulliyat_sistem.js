@@ -24,14 +24,13 @@ window.addEventListener('load', function() {
     let indexNumarasi = kitapListesi.indexOf(suankiDosya);
     let kitapAdi = indexNumarasi !== -1 ? kitapGercekAdlari[indexNumarasi] : "Külliyat";
 
-    // --- SADECE ÇARPI BUTONU (Arama yokken de görünsün diye dışarı aldık) ---
+    // --- KAPAT BUTONU ---
     if (!aranan) {
         const tekKapat = document.createElement('button');
         tekKapat.innerHTML = "✕";
-        // Sağ üstten 40px içerde, kırmızı daire çarpı
         tekKapat.style = `position:fixed; top:20px; right:40px; width:42px; height:42px; border-radius:50%; border:none; background:#d93025; color:#fff; font-weight:bold; font-size:20px; cursor:pointer; z-index:999999; box-shadow:0 4px 10px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center;`;
         document.body.appendChild(tekKapat);
-        tekKapat.onclick = () => { window.location.href = 'index.html'; };
+        tekKapat.onclick = () => { window.location.href = 'ara.html'; };
     }
 
     if (aranan) {
@@ -51,8 +50,9 @@ window.addEventListener('load', function() {
             </div>`;
         
         document.body.appendChild(panel);
-        document.getElementById('kapatBtn').onclick = () => { window.location.href = 'index.html'; };
+        document.getElementById('kapatBtn').onclick = () => { window.location.href = 'ara.html'; };
 
+        // TÜRKÇE KARAKTER DUYARLI ARAMA
         const regex = new RegExp("(" + aranan.replace(/İ/g, "(İ|i)").replace(/i/g, "(İ|i)").replace(/I/g, "(I|ı)").replace(/ı/g, "(I|ı)") + ")", "gi");
         
         function boya(node) {
