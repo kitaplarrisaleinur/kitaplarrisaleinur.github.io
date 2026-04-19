@@ -30,7 +30,7 @@ window.addEventListener('load', function() {
         tekKapat.innerHTML = "✕";
         tekKapat.style = `position:fixed; top:20px; right:40px; width:42px; height:42px; border-radius:50%; border:none; background:#d93025; color:#fff; font-weight:bold; font-size:20px; cursor:pointer; z-index:999999; box-shadow:0 4px 10px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center;`;
         document.body.appendChild(tekKapat);
-        tekKapat.onclick = () => { window.location.href = 'ara.html'; };
+        tekKapat.onclick = () => { window.location.href = 'index.html'; };
     }
 
     if (aranan) {
