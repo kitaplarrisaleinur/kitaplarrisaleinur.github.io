@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Külliyat Veritabanı Yükleyici</title></head>
+<body>
+    <h2>Külliyatı Chrome Kasasına Göm</h2>
+    <input type="file" id="dosyalar" multiple accept=".html">
+    <button onclick="veritabaniniKur()">VERİTABANINI İNŞA ET</button>
+    <div id="durum"></div>
+
+    <script>
+    function veritabaniniKur() {
+        const files = document.getElementById('dosyalar').files;
+        const request = indexedDB.open("KulliyatDB", 1);
+        
+        request.onupgradeneeded = e => {
+            const db = e.target.result;
+            db.createObjectStore("kitaplar", { keyPath: "isim" }); // Kitap deposu
+        };
+
+        request.onsuccess = e => {
+            const db = e.target.result;
+            const tx = db.transaction("kitaplar", "readwrite");
+            const store = tx.objectStore("kitaplar");
+
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    store.put({ isim: file.name, icerik: ev.target.result });
+                    document.getElementById('durum').innerText = file.name + " gömüldü...";
+                };
+                reader.readAsText(file);
+            }
+            tx.oncomplete = () => alert("Külliyat Chrome kasasına kilitlendi! Artık engelsizsin.");
+        };
+    }
+    </script>
+</body>
+</html>
