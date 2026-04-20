@@ -50,7 +50,7 @@ window.addEventListener('load', function() {
             </div>`;
         
         document.body.appendChild(panel);
-        document.getElementById('kapatBtn').onclick = () => { window.location.href = 'ara.html'; };
+        document.getElementById('kapatBtn').onclick = () => { window.location.href = 'index.html'; };
 
         // TÜRKÇE KARAKTER DUYARLI ARAMA
         const regex = new RegExp("(" + aranan.replace(/İ/g, "(İ|i)").replace(/i/g, "(İ|i)").replace(/I/g, "(I|ı)").replace(/ı/g, "(I|ı)") + ")", "gi");

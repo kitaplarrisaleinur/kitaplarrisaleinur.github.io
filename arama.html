@@ -2,42 +2,35 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Külliyat Arama</title>
     <script src="fihrist.js"></script> 
     <style>
-        body { font-family: sans-serif; background: #f0f0f0; margin: 0; padding: 0; text-align: center; }
-        .ust-panel { position: sticky; top: 0; background: #2c3e50; padding: 20px 15px; color: white; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        input { width: 90%; max-width: 400px; padding: 15px; font-size: 20px; border: none; border-radius: 30px; outline: none; text-align: center; }
-        .toplam-skor { font-size: 24px; font-weight: bold; margin-top: 15px; color: #f1c40f; }
-        #sonuclar { padding: 15px; display: inline-block; width: 100%; box-sizing: border-box; }
-        
-        /* Satıra tıklama efekti ekledik */
+        body { font-family: sans-serif; background: #f4f4f4; text-align: center; padding: 20px; }
+        .panel { background: #2c3e50; padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        input { width: 80%; padding: 15px; font-size: 22px; border-radius: 30px; border: none; outline: none; }
+        .skor { font-size: 26px; color: #f1c40f; margin-top: 15px; font-weight: bold; }
+        #sonuclar { margin-top: 20px; }
         .satir { 
-            background: white; width: 95%; max-width: 500px; margin: 5px auto; 
-            padding: 15px; border-radius: 10px; display: flex; 
-            justify-content: center; align-items: center; cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 18px;
-            transition: background 0.2s;
+            background: white; margin: 10px auto; padding: 20px; width: 90%; max-width: 600px;
+            border-radius: 15px; display: flex; justify-content: space-between; 
+            cursor: pointer; font-size: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .satir:hover { background: #eef6ff; } /* Üstüne gelince hafif renk değişir */
-        
-        .kitap-adi { font-weight: bold; color: #333; }
-        .adet { margin-left: 10px; color: #2980b9; font-weight: bold; }
-        .sifir { margin-left: 10px; color: #bdc3c7; }
+        .satir:hover { background: #e8f4fd; }
+        .kitap-ad { font-weight: bold; color: #333; }
+        .sayi { color: #2980b9; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="ust-panel">
-    <input type="text" id="arama" placeholder="Kelimeni yaz abi..." oninput="ara()" autofocus>
-    <div id="toplam" class="toplam-skor">Toplam: 0</div>
+<div class="panel">
+    <input type="text" id="aramaKutusu" placeholder="Kelimeni yaz abi..." oninput="ara()">
+    <div id="toplam" class="skor">Toplam: 0</div>
 </div>
 
 <div id="sonuclar"></div>
 
 <script>
-const kitaplar = [
+const kitapListesi = [
     "sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html",
     "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html",
     "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html",
@@ -47,33 +40,47 @@ const kitaplar = [
 ];
 
 function ara() {
-    let kelime = document.getElementById('arama').value.toLowerCase().trim();
+    // 1. Arama kutusundaki girişi küçültüyoruz
+    let aranan = document.getElementById('aramaKutusu').value.replace('İ', 'i').replace('I', 'ı').toLowerCase().trim();
     let divSonuc = document.getElementById('sonuclar');
     let divToplam = document.getElementById('toplam');
     
     divSonuc.innerHTML = "";
+    let kitapToplami = {}; 
     let genelToplam = 0;
 
-    if (kelime.length < 2) {
+    if (aranan.length < 2) {
         divToplam.innerText = "Toplam: 0";
         return;
     }
 
-    let bulunanlar = (typeof fihrist !== 'undefined') ? (fihrist[kelime] || {}) : {};
+    // 2. FİHRİSTİ TARIYORUZ
+    for (let anahtar in fihrist) {
+        // Fihristteki anahtarı da (mesela ASKERİ) geçici olarak küçültüp öyle bakıyoruz
+        let kucukAnahtar = anahtar.replace('İ', 'i').replace('I', 'ı').toLowerCase();
 
-    kitaplar.forEach(kitap => {
-        let adet = bulunanlar[kitap] || 0;
-        genelToplam += adet;
-        
-        let stil = (adet > 0) ? "adet" : "sifir";
-        let temizAd = kitap.replace(".html", "").toUpperCase();
-        
-        // --- İŞTE BURASI DEĞİŞTİ: TIKLAYINCA KİTABIN İÇİNE GÖNDERİYOR ---
-        divSonuc.innerHTML += `
-            <div class="satir" onclick="window.location.href='${kitap}?ara=${encodeURIComponent(kelime)}'">
-                <span class="kitap-adi">${temizAd}</span>
-                <span class="${stil}">(${adet})</span>
-            </div>`;
+        // Eğer fihristteki kelime senin yazdığınla BAŞLIYORSA
+        if (kucukAnahtar.startsWith(aranan)) {
+            for (let kitap in fihrist[anahtar]) {
+                if (!kitapToplami[kitap]) kitapToplami[kitap] = 0;
+                // Bulduğu tüm türevleri (asker, askerlik, askeri) toplama ekler
+                kitapToplami[kitap] += fihrist[anahtar][kitap];
+                genelToplam += fihrist[anahtar][kitap];
+            }
+        }
+    }
+
+    // 3. Listeleme
+    kitapListesi.forEach(kitap => {
+        let adet = kitapToplami[kitap] || 0;
+        if (adet > 0) {
+            let ad = kitap.replace(".html", "").toUpperCase();
+            divSonuc.innerHTML += `
+                <div class="satir" onclick="window.location.href='${kitap}?ara=${encodeURIComponent(aranan)}'">
+                    <span class="kitap-ad">${ad}</span>
+                    <span class="sayi">${adet}</span>
+                </div>`;
+        }
     });
 
     divToplam.innerText = `Toplam Bulunan: ${genelToplam}`;
