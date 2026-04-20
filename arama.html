@@ -2,22 +2,34 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <!-- TELEFONA SIĞDIRAN KRİTİK SATIR -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Külliyat Arama</title>
     <script src="fihrist.js"></script> 
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; text-align: center; padding: 20px; }
-        .panel { background: #2c3e50; padding: 30px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        input { width: 80%; padding: 15px; font-size: 22px; border-radius: 30px; border: none; outline: none; }
-        .skor { font-size: 26px; color: #f1c40f; margin-top: 15px; font-weight: bold; }
-        #sonuclar { margin-top: 20px; }
+        /* Ekran ayarları: Sağa sola taşmayı engeller */
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; background: #f4f4f4; text-align: center; padding: 10px; margin: 0; }
+        
+        /* Panel telefonda tam genişlikte olur */
+        .panel { background: #2c3e50; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        /* Arama kutusu artık ekrandan taşmaz */
+        input { width: 100%; padding: 15px; font-size: 20px; border-radius: 30px; border: none; outline: none; }
+        
+        .skor { font-size: 22px; color: #f1c40f; margin-top: 15px; font-weight: bold; }
+        
+        #sonuclar { margin-top: 20px; width: 100%; }
+        
+        /* Satırlar ekrana tam sığar, isim ve sayı yan yana görünür */
         .satir { 
-            background: white; margin: 10px auto; padding: 20px; width: 90%; max-width: 600px;
-            border-radius: 15px; display: flex; justify-content: space-between; 
-            cursor: pointer; font-size: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: white; margin: 10px auto; padding: 15px; width: 100%; max-width: 600px;
+            border-radius: 15px; display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; font-size: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .satir:hover { background: #e8f4fd; }
-        .kitap-ad { font-weight: bold; color: #333; }
-        .sayi { color: #2980b9; font-weight: bold; }
+        .kitap-ad { font-weight: bold; color: #333; text-align: left; }
+        .sayi { color: #2980b9; font-weight: bold; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -40,7 +52,6 @@ const kitapListesi = [
 ];
 
 function ara() {
-    // 1. Arama kutusundaki girişi küçültüyoruz
     let aranan = document.getElementById('aramaKutusu').value.replace('İ', 'i').replace('I', 'ı').toLowerCase().trim();
     let divSonuc = document.getElementById('sonuclar');
     let divToplam = document.getElementById('toplam');
@@ -54,23 +65,18 @@ function ara() {
         return;
     }
 
-    // 2. FİHRİSTİ TARIYORUZ
     for (let anahtar in fihrist) {
-        // Fihristteki anahtarı da (mesela ASKERİ) geçici olarak küçültüp öyle bakıyoruz
         let kucukAnahtar = anahtar.replace('İ', 'i').replace('I', 'ı').toLowerCase();
 
-        // Eğer fihristteki kelime senin yazdığınla BAŞLIYORSA
         if (kucukAnahtar.startsWith(aranan)) {
             for (let kitap in fihrist[anahtar]) {
                 if (!kitapToplami[kitap]) kitapToplami[kitap] = 0;
-                // Bulduğu tüm türevleri (asker, askerlik, askeri) toplama ekler
                 kitapToplami[kitap] += fihrist[anahtar][kitap];
                 genelToplam += fihrist[anahtar][kitap];
             }
         }
     }
 
-    // 3. Listeleme
     kitapListesi.forEach(kitap => {
         let adet = kitapToplami[kitap] || 0;
         if (adet > 0) {
