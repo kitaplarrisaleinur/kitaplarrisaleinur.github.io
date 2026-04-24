@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap:https://kitaplarrisaleinur.github.io/
+Sitemap: https://kitaplarrisaleinur.github.io
