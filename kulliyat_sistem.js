@@ -15,8 +15,8 @@ window.addEventListener('load', function() {
             const tekKapat = document.createElement('button');
             tekKapat.id = "tekKapat";
             tekKapat.innerHTML = "✕";
-            // top: 85px yaparak ve translateY(50%) ekleyerek butonu panelin altına indirdik
-            tekKapat.style = `position:fixed; top:85px; right:30px; width:45px; height:45px; border-radius:50%; border:none; background:#d93025; color:#fff; font-weight:bold; font-size:20px; cursor:pointer; z-index:999999; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; transform: translateY(50%);`;
+            // top: 145px yaparak ve translateY(50%) ekleyerek butonu panelin altına indirdik
+            tekKapat.style = `position:fixed; top:145px; right:30px; width:45px; height:45px; border-radius:50%; border:none; background:#d93025; color:#fff; font-weight:bold; font-size:20px; cursor:pointer; z-index:999999; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; transform: translateY(50%);`;
             document.body.appendChild(tekKapat);
             tekKapat.onclick = () => { window.location.href = 'index.html'; };
         }
