@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiz Sistemi</title>
+    <script src="fihrist.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; background: #eceff1; margin: 0; padding: 10px; }
+        
+        .panel { 
+            background: #1a237e; padding: 12px; border-radius: 12px; 
+            max-width: 600px; margin: 10px auto; position: sticky; top: 10px; z-index: 1000;
+        }
+        .arama-kutusu { display: flex; background: white; border-radius: 25px; padding: 4px; border: 2px solid #f1c40f; }
+        input { flex: 1; border: none; padding: 10px 15px; border-radius: 25px; outline: none; font-size: 16px; }
+        .ara-btn { background: #f1c40f; border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; cursor: pointer; color: #1a237e; }
+
+        #sonuclar { max-width: 750px; margin: 15px auto; }
+        .kart { background: white; margin-bottom: 25px; border-radius: 15px; border-top: 6px solid #27ae60; box-shadow: 0 4px 15px rgba(0,0,0,0.15); overflow: hidden; }
+        .kart-baslik { background: #f8f9fa; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; font-weight: bold; color: #1a237e; }
+        
+        .okuma-alani { padding: 25px; font-size: 21px; line-height: 1.8; text-align: justify; height: 500px; overflow-y: auto; color: #333; }
+        
+        mark { background: #ffeb3b; font-weight: bold; border-radius: 3px; padding: 0 2px; }
+        .kapat-btn { color: #d32f2f; cursor: pointer; font-size: 20px; font-weight: bold; }
+        .yukleniyor-bilgi { text-align: center; font-size: 12px; color: #777; padding: 5px; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <div class="arama-kutusu">
+        <input type="text" id="aramaKutusu" placeholder="Kelimeleri yaz ve Enter'la..." onkeydown="if(event.key==='Enter') analizBaslat()">
+        <button class="ara-btn" onclick="analizBaslat()">ARA</button>
+    </div>
+</div>
+
+<div id="sonuclar"></div>
+
+<script>
+const kitaplar = ["sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html", "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html", "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html", "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html", "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html", "genclik.html", "muhakemat.html", "nurunilkkapisi.html"];
+const kitapAdlari = {"sozler.html":"Sözler","mektubat1.html":"Mektubat 1","mektubat2.html":"Mektubat 2","lemalar.html":"Lem'alar","sualar1.html":"Şualar 1","sualar2.html":"Şualar 2","siracunnur.html":"Sıracın Nur","zulfikar.html":"Zülfikar","asayimusa.html":"Asayı Musa","tilsimlar.html":"Tılsımlar","isaratulicaz.html":"İşaratül İcaz","mesnevinuriye.html":"Mesnevi Nuriye","stgaybi.html":"S.T. Gaybi","barla.html":"Barla","kastamonu.html":"Kastamonu","emirdag1.html":"Emirdağ 1","emirdag2.html":"Emirdağ 2","emirdag3.html":"Emirdağ 3","emirdag4.html":"Emirdağ 4","hanimlar.html":"Hanımlar Rehberi","genclik.html":"Gençlik Rehberi","muhakemat.html":"Muhakemat","nurunilkkapisi.html":"Nurun İlk Kapısı"};
+
+async function analizBaslat() {
+    let deger = document.getElementById('aramaKutusu').value.toLocaleLowerCase('tr-TR').trim();
+    let kelimeler = deger.split(/\s+/).filter(k => k.length >= 2);
+    if (kelimeler.length < 2) return;
+    document.getElementById('sonuclar').innerHTML = "";
+
+    for (let dosya of kitaplar) {
+        let muhtemel = kelimeler.every(kel => {
+            for (let k in fihrist) { if (k.toLocaleLowerCase('tr-TR').startsWith(kel) && fihrist[k][dosya]) return true; }
+            return false;
+        });
+        if (muhtemel) await kitapIciAnaliz(dosya, kelimeler);
+    }
+}
+
+async function kitapIciAnaliz(dosya, kelimeler) {
+    try {
+        let res = await fetch(dosya);
+        let html = await res.text();
+        let metin = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+        let mLow = metin.toLocaleLowerCase('tr-TR');
+        let anahtar = kelimeler[0].toLocaleLowerCase('tr-TR');
+        let pos = mLow.indexOf(anahtar);
+
+        while (pos !== -1) {
+            let bas = Math.max(0, pos - 600), son = Math.min(metin.length, pos + 600);
+            if (kelimeler.every(k => mLow.substring(bas, son).includes(k.toLocaleLowerCase('tr-TR')))) {
+                kartOlustur(dosya, metin, bas, son, kelimeler);
+                break;
+            }
+            pos = mLow.indexOf(anahtar, pos + 1);
+        }
+    } catch (e) {}
+}
+
+function kartOlustur(dosya, tamMetin, bas, son, kelimeler) {
+    let cBas = bas, cSon = son;
+    let kart = document.createElement("div");
+    kart.className = "kart";
+    
+    const render = () => {
+        let kesit = tamMetin.substring(cBas, cSon);
+        kelimeler.forEach(k => {
+            kesit = kesit.replace(new RegExp(k + "[a-zçğışöü]*", "gi"), x => `<mark>${x}</mark>`);
+        });
+        return kesit;
+    };
+
+    kart.innerHTML = `
+        <div class="kart-baslik"><span>📖 ${kitapAdlari[dosya] || dosya}</span><span class="kapat-btn" onclick="this.closest('.kart').remove()">✕</span></div>
+        <div class="yukleniyor-bilgi">Yukarı kaydırarak öncesini oku...</div>
+        <div class="okuma-alani">${render()}</div>
+        <div class="yukleniyor-bilgi">Aşağı kaydırarak sonrasını oku...</div>`;
+    
+    const alan = kart.querySelector('.okuma-alani');
+    
+    // Otomatik Kaydırma (Scroll) Kontrolü
+    alan.onscroll = () => {
+        // En üste gelirse yukarıdan 1000 karakter ekle
+        if (alan.scrollTop === 0 && cBas > 0) {
+            let eskiBoy = alan.scrollHeight;
+            cBas = Math.max(0, cBas - 1500);
+            alan.innerHTML = render();
+            alan.scrollTop = alan.scrollHeight - eskiBoy; // Kaldığı yeri koru
+        }
+        // En alta gelirse aşağıdan 1000 karakter ekle
+        if (alan.scrollHeight - alan.scrollTop <= alan.clientHeight + 1) {
+            if (cSon < tamMetin.length) {
+                cSon = Math.min(tamMetin.length, cSon + 1500);
+                alan.innerHTML = render();
+            }
+        }
+    };
+
+    document.getElementById('sonuclar').appendChild(kart);
+    alan.scrollTop = 50; // Başlangıçta hafif aşağı al ki yukarı kaydırma tetiklenebilsin
+}
+</script>
+<script src="kulliyat_sistem.js"></script>
+</body>
+</html>

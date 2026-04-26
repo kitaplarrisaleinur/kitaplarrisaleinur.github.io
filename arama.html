@@ -8,18 +8,42 @@
     <style>
         * { box-sizing: border-box; }
         body { font-family: sans-serif; background: #f4f4f4; text-align: center; padding: 10px; margin: 0; }
-        
-        /* BURAYI DÜZENLEDİM: Laptopta çok geniş olmasın diye max-width ve ortalama eklendi */
         .panel { 
             background: #2c3e50; 
             padding: 20px; 
             border-radius: 20px; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            max-width: 600px; /* Laptopta genişliği sınırlar */
-            margin: 0 auto;   /* Ortada durmasını sağlar */
+            max-width: 600px; 
+            margin: 0 auto;   
         }
-        
-        input { width: 100%; padding: 15px; font-size: 20px; border-radius: 30px; border: none; outline: none; }
+
+        /* İstediğin o birleşik kutu ve buton yapısı */
+        .arama-kapsayici {
+            display: flex;
+            background: white;
+            border-radius: 30px;
+            padding: 5px;
+            align-items: center;
+        }
+        input { 
+            flex: 1; 
+            padding: 10px 20px; 
+            font-size: 18px; 
+            border: none; 
+            outline: none; 
+            border-radius: 30px;
+        }
+        .ara-btn-kucuk {
+            background: #f1c40f;
+            color: #2c3e50;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
         .skor { font-size: 18px; color: #f1c40f; margin-top: 15px; font-weight: bold; line-height: 1.4; }
         #sonuclar { margin-top: 20px; width: 100%; }
         .satir { 
@@ -36,21 +60,35 @@
 <body>
 
 <div class="panel">
-    <input type="text" id="aramaKutusu" placeholder="Kelimeleri boşlukla yaz abi..." oninput="ara()">
+    <div class="arama-kapsayici">
+        <!-- oninput silindi, sadece Enter veya Buton ile çalışır -->
+        <input type="text" id="aramaKutusu" placeholder="Kelimeleri yaz abi..." onkeydown="if(event.key==='Enter') ara()">
+        <button class="ara-btn-kucuk" onclick="ara()">ARA</button>
+    </div>
     <div id="toplam" class="skor">Toplam: 0</div>
+</div>
+
+<div style="margin-top: 15px; text-align: center;">
+    <button onclick="window.location.href='cokluara.html'" style="
+        background: #f1c40f; 
+        color: #2c3e50; 
+        border: none; 
+        padding: 10px 20px; 
+        border-radius: 20px; 
+        font-weight: bold; 
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-size: 14px;
+    ">
+       Çoklu Kelime Arama Kutusuna Git 🚀
+    </button>
 </div>
 
 <div id="sonuclar"></div>
 
 <script>
-const kitapListesi = [
-    "sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html",
-    "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html",
-    "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html",
-    "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html",
-    "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html",
-    "genclik.html", "muhakemat.html", "nurunilkkapisi.html"
-];
+const kitapListesi = ["sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html", "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html", "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html", "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html", "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html", "genclik.html", "muhakemat.html", "nurunilkkapisi.html"];
+const kitapGercekAdlari = ["Sözler", "Mektubat 1", "Mektubat 2", "Lem'alar", "Şualar 1", "Şualar 2", "Sıracın Nur", "Zülfikar", "Asayı Musa", "Tılsımlar", "İşaratül İcaz", "Mesnevi Nuriye", "ST Gaybi", "Barla", "Kastamonu", "Emirdağ 1", "Emirdağ 2", "Emirdağ 3", "Emirdağ 4", "Hanımlar Rehberi", "Gençlik Rehberi", "Muhakemat", "Nurun İlk Kapısı"];
 
 function ara() {
     let arananTam = document.getElementById('aramaKutusu').value.toLocaleLowerCase('tr-TR').trim();
@@ -71,13 +109,11 @@ function ara() {
 
     for (let anahtar in fihrist) {
         let kucukAnahtar = anahtar.toLocaleLowerCase('tr-TR');
-
         kelimeler.forEach(kelime => {
             if (kucukAnahtar.startsWith(kelime)) {
                 for (let kitap in fihrist[anahtar]) {
                     if (!kitapDetaylari[kitap]) kitapDetaylari[kitap] = {};
                     if (!kitapDetaylari[kitap][kelime]) kitapDetaylari[kitap][kelime] = 0;
-                    
                     let adet = fihrist[anahtar][kitap];
                     kitapDetaylari[kitap][kelime] += adet;
                     genelKelimeToplamlari[kelime] += adet;
@@ -86,27 +122,31 @@ function ara() {
         });
     }
 
-    kitapListesi.forEach(kitap => {
-        if (kitapDetaylari[kitap]) {
-            let ad = kitap.replace(".html", "").toUpperCase();
-            let detayYazisi = "";
-            let kitapToplami = 0;
+    kitapListesi.forEach((kitap, index) => {
+        let ad = kitapGercekAdlari[index];
+        let detayYazisi = "";
+        let kitapToplami = 0;
 
+        if (kitapDetaylari[kitap]) {
             for (let kelime in kitapDetaylari[kitap]) {
                 let sayi = kitapDetaylari[kitap][kelime];
                 detayYazisi += `${kelime}: ${sayi} | `;
                 kitapToplami += sayi;
             }
-
-            divSonuc.innerHTML += `
-                <div class="satir" onclick="window.location.href='${kitap}?ara=${encodeURIComponent(arananTam)}'">
-                    <div>
-                        <div class="kitap-ad">${ad}</div>
-                        <div class="detay-yazi">${detayYazisi.slice(0, -3)}</div>
-                    </div>
-                    <span class="sayi">${kitapToplami}</span>
-                </div>`;
+            detayYazisi = detayYazisi.slice(0, -3);
+        } else {
+            detayYazisi = "Sonuç yok";
+            kitapToplami = 0;
         }
+
+        divSonuc.innerHTML += `
+            <div class="satir" style="opacity: ${kitapToplami === 0 ? '0.5' : '1'}" onclick="window.location.href='${kitap}?ara=${encodeURIComponent(arananTam)}'">
+                <div>
+                    <div class="kitap-ad">${ad}</div>
+                    <div class="detay-yazi">${detayYazisi}</div>
+                </div>
+                <span class="sayi">${kitapToplami}</span>
+            </div>`;
     });
 
     let genelYazi = "";
