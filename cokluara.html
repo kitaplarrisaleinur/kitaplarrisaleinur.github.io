@@ -2,199 +2,96 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gelişmiş Analiz Sistemi</title>
-    <script src="fihrist.js"></script>
+    <title>Nokta Atışı Radar (100 Harf)</title>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: sans-serif; background: #eceff1; margin: 0; padding: 10px; }
-        
-        /* Arama Paneli */
-        .panel { 
-            background: #1a237e; padding: 12px; border-radius: 12px; 
-            max-width: 450px; margin: 5px auto; position: sticky; top: 5px; z-index: 2000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .arama-kutusu { display: flex; background: white; border-radius: 25px; padding: 4px; border: 2px solid #f1c40f; }
-        input { flex: 1; border: none; padding: 10px 15px; border-radius: 25px; outline: none; font-size: 16px; width: 100%; }
-        .ara-btn { background: #f1c40f; border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; cursor: pointer; color: #1a237e; }
-
-        /* Sonuç Kartları ve Üst Boşluk Ayarı */
-        #sonuclar { 
-            max-width: 480px; 
-            margin: 10px auto; /* Boşluğu buradan yarıya indirdik */
-            padding: 0 10px; 
-        }
-        
-        .kart { 
-            background: white; 
-            margin-bottom: 25px; 
-            border-radius: 15px; 
-            border-top: 6px solid #27ae60; 
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2); 
-            overflow: hidden;
-            position: relative;
-        }
-
-        .kart-baslik { 
-            background: #f8f9fa; 
-            padding: 10px 15px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #eee; 
-            font-weight: bold; 
-            color: #1a237e;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        
-        .okuma-alani { 
-            padding: 20px; 
-            font-size: 19px; 
-            line-height: 1.7; 
-            text-align: justify; 
-            height: 400px; 
-            overflow-y: auto; 
-            color: #333; 
-            background: #fff;
-            scroll-behavior: smooth;
-        }
-        
-        mark { background: #ffeb3b; font-weight: bold; border-radius: 3px; padding: 0 2px; }
-        
-        .kapat-btn { 
-            color: #d32f2f; 
-            cursor: pointer; 
-            font-size: 18px; 
-            font-weight: bold; 
-            padding: 4px 10px;
-            background: #ffebee;
-            border-radius: 8px;
-            margin-left: 10px;
-        }
-
-        .yukleniyor-bilgi { text-align: center; font-size: 11px; color: #888; padding: 6px; background: #fcfcfc; }
-        .puan-bilgisi { font-size: 11px; color: #27ae60; background: #e8f5e9; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
-
-        @media (max-width: 600px) {
-            #sonuclar { max-width: 98%; padding: 0 5px; }
-            .okuma-alani { font-size: 18px; height: 350px; }
-        }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding: 20px; }
+        .ust-panel { background: #2c3e50; padding: 25px; border-radius: 20px; max-width: 600px; margin: auto; border: 2px solid #e67e22; }
+        input { width: 85%; padding: 12px; border-radius: 25px; border: none; font-size: 16px; outline: none; margin-bottom: 15px; }
+        button { background: #e67e22; color: white; border: none; padding: 12px 40px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 18px; }
+        .sonuc-karti { background: white; color: #333; margin: 20px auto; padding: 25px; border-radius: 15px; text-align: left; border-left: 10px solid #e67e22; max-width: 700px; line-height: 1.8; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        mark { background: yellow; color: black; font-weight: bold; padding: 2px 5px; }
+        #bilgi { margin-top: 15px; color: #f1c40f; font-weight: bold; }
+        .git-btn { color:#3498db; font-weight:bold; text-decoration:none; cursor:pointer; display:inline-block; margin-top:10px; }
     </style>
 </head>
 <body>
 
-<div class="panel">
-    <div class="arama-kutusu">
-        <input type="text" id="aramaKutusu" placeholder="Arama yapın..." onkeydown="if(event.key==='Enter') analizBaslat()">
-        <button class="ara-btn" onclick="analizBaslat()">ARA</button>
-    </div>
+<div class="ust-panel">
+    <input type="text" id="aramaInput" placeholder="Kelimeleri yazın (Örn: hakiki iman)">
+    <br>
+    <button onclick="darRadar()">100 HARF MESAFELİ TARA</button>
+    <div id="bilgi">Mesafe: 100 Harf (Sıkı Takip)</div>
 </div>
 
-<div id="sonuclar"></div>
+<div id="sonucDökümü"></div>
 
 <script>
-const kitaplar = ["sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html", "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html", "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html", "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html", "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html", "genclik.html", "muhakemat.html", "nurunilkkapisi.html"];
-const kitapAdlari = {"sozler.html":"Sözler","mektubat1.html":"Mektubat 1","mektubat2.html":"Mektubat 2","lemalar.html":"Lem'alar","sualar1.html":"Şualar 1","sualar2.html":"Şualar 2","siracunnur.html":"Sıracın Nur","zulfikar.html":"Zülfikar","asayimusa.html":"Asayı Musa","tilsimlar.html":"Tılsımlar","isaratulicaz.html":"İşaratül İcaz","mesnevinuriye.html":"Mesnevi Nuriye","stgaybi.html":"S.T. Gaybi","barla.html":"Barla","kastamonu.html":"Kastamonu","emirdag1.html":"Emirdağ 1","emirdag2.html":"Emirdağ 2","emirdag3.html":"Emirdağ 3","emirdag4.html":"Emirdağ 4","hanimlar.html":"Hanımlar Rehberi","genclik.html":"Gençlik Rehberi","muhakemat.html":"Muhakemat","nurunilkkapisi.html":"Nurun İlk Kapısı"};
+async function darRadar() {
+    const girdi = document.getElementById('aramaInput').value.toLocaleLowerCase('tr-TR').trim();
+    const parcalar = girdi.split(/\s+/).filter(k => k.length >= 2);
+    const döküm = document.getElementById('sonucDökümü');
+    const bilgi = document.getElementById('bilgi');
+    
+    döküm.innerHTML = "";
+    if (parcalar.length < 2) { bilgi.innerText = "En az 2 kelime yazın!"; return; }
 
-async function analizBaslat() {
-    let deger = document.getElementById('aramaKutusu').value.toLocaleLowerCase('tr-TR').trim();
-    let kelimeler = deger.split(/\s+/).filter(k => k.length >= 2);
-    if (kelimeler.length < 2) return;
+    const MAX_MESAFE = 100; 
+    const kitaplar = ["sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html", "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html", "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html", "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html", "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html", "genclik.html", "muhakemat.html", "nurunilkkapisi.html"];
 
-    document.getElementById('sonuclar').innerHTML = "<div class='yukleniyor-bilgi'>En alakalı sonuçlar bulunuyor...</div>";
-    let tumBulunanlar = [];
+    bilgi.innerText = "100 harf hassasiyetiyle taranıyor...";
 
-    for (let dosya of kitaplar) {
-        let muhtemel = kelimeler.every(kel => {
-            for (let k in fihrist) { if (k.toLocaleLowerCase('tr-TR').startsWith(kel) && fihrist[k][dosya]) return true; }
-            return false;
-        });
-        if (muhtemel) {
-            let sonuc = await kitapIciAnaliz(dosya, kelimeler);
-            if (sonuc) tumBulunanlar.push(sonuc);
-        }
+    for (let kitap of kitaplar) {
+        try {
+            const res = await fetch(kitap);
+            if (!res.ok) continue;
+            const html = await res.text();
+            
+            const div = document.createElement("div");
+            div.innerHTML = html;
+            const safMetin = div.innerText;
+            const kucukMetin = safMetin.toLocaleLowerCase('tr-TR');
+
+            for (let i = 0; i < kucukMetin.length; i++) {
+                let buldukMu = false;
+                let bulunanIdx = -1;
+
+                for (let p of parcalar) {
+                    if (kucukMetin.startsWith(p, i)) {
+                        bulunanIdx = i;
+                        buldukMu = true;
+                        break;
+                    }
+                }
+
+                if (buldukMu) {
+                    let kesit = kucukMetin.slice(bulunanIdx, bulunanIdx + MAX_MESAFE);
+                    let hepsiBurada = parcalar.every(p => kesit.includes(p));
+
+                    if (hepsiBurada) {
+                        // BURASI ÖNEMLİ: Mıknatıs parçayı koparıyoruz
+                        let miknatis = safMetin.slice(bulunanIdx, bulunanIdx + 60).trim();
+                        let orjinal = safMetin.slice(Math.max(0, bulunanIdx - 30), bulunanIdx + 200);
+                        
+                        parcalar.forEach(p => {
+                            const reg = new RegExp(p, "gi");
+                            orjinal = orjinal.replace(reg, m => `<mark>${m}</mark>`);
+                        });
+
+                        döküm.innerHTML += `
+                            <div class="sonuc-karti">
+                                <h3>📘 ${kitap.toUpperCase()}</h3>
+                                <p>...${orjinal}...</p>
+                                <a onclick="window.open('git.html?kitap=${kitap}&m=${encodeURIComponent(miknatis)}&k=${encodeURIComponent(parcalar.join(','))}', '_blank')" class="git-btn">Kitabı Tam O Noktada Aç ➜</a>
+                            </div>`;
+                        
+                        i = bulunanIdx + MAX_MESAFE; 
+                    }
+                }
+            }
+        } catch (e) {}
     }
-
-    tumBulunanlar.sort((a, b) => b.puan - a.puan);
-    document.getElementById('sonuclar').innerHTML = "";
-    tumBulunanlar.forEach(s => kartOlustur(s.dosya, s.metin, s.bas, s.son, kelimeler, s.puan));
-}
-
-async function kitapIciAnaliz(dosya, kelimeler) {
-    try {
-        let res = await fetch(dosya);
-        let html = await res.text();
-        let metin = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
-        let mLow = metin.toLocaleLowerCase('tr-TR');
-        let enIyiPuan = -1, enIyiBas = 0, ilkKelime = kelimeler[0].toLocaleLowerCase('tr-TR');
-        let pos = mLow.indexOf(ilkKelime);
-
-        while (pos !== -1) {
-            let bas = Math.max(0, pos - 600), son = Math.min(metin.length, pos + 600);
-            let kesit = mLow.substring(bas, son);
-            if (kelimeler.every(k => kesit.includes(k.toLocaleLowerCase('tr-TR')))) {
-                let mesafeler = kelimeler.map(k => kesit.indexOf(k.toLocaleLowerCase('tr-TR')));
-                let anlikPuan = 1000 - (Math.max(...mesafeler) - Math.min(...mesafeler));
-                if (anlikPuan > enIyiPuan) { enIyiPuan = anlikPuan; enIyiBas = bas; }
-            }
-            pos = mLow.indexOf(ilkKelime, pos + 1);
-        }
-        if (enIyiPuan !== -1) return { dosya, metin, bas: enIyiBas, son: Math.min(metin.length, enIyiBas + 1200), puan: enIyiPuan };
-    } catch (e) { return null; }
-}
-
-function kartOlustur(dosya, tamMetin, bas, son, kelimeler, puan) {
-    let cBas = bas, cSon = son;
-    let kart = document.createElement("div");
-    kart.className = "kart";
-    
-    const render = () => {
-        let kesit = tamMetin.substring(cBas, cSon);
-        kelimeler.forEach(k => {
-            kesit = kesit.replace(new RegExp(k + "[a-zçğışöü]*", "gi"), x => `<mark>${x}</mark>`);
-        });
-        return kesit;
-    };
-
-    kart.innerHTML = `
-        <div class="kart-baslik">
-            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">📖 ${kitapAdlari[dosya] || dosya}</span>
-            <span class="puan-bilgisi">%${(puan/10).toFixed(0)}</span>
-            <span class="kapat-btn" onclick="this.closest('.kart').remove()">✕</span>
-        </div>
-        <div class="yukleniyor-bilgi">↑ Öncesi</div>
-        <div class="okuma-alani">${render()}</div>
-        <div class="yukleniyor-bilgi">↓ Sonrası</div>`;
-    
-    const alan = kart.querySelector('.okuma-alani');
-    
-    setTimeout(() => {
-        const ilkMark = alan.querySelector('mark');
-        if (ilkMark) {
-            alan.scrollTop = ilkMark.offsetTop - (alan.clientHeight / 2);
-        }
-    }, 150);
-
-    alan.onscroll = () => {
-        if (alan.scrollTop === 0 && cBas > 0) {
-            let eskiBoy = alan.scrollHeight;
-            cBas = Math.max(0, cBas - 1500);
-            alan.innerHTML = render();
-            alan.scrollTop = alan.scrollHeight - eskiBoy;
-        }
-        if (alan.scrollHeight - alan.scrollTop <= alan.clientHeight + 2) {
-            if (cSon < tamMetin.length) {
-                cSon = Math.min(tamMetin.length, cSon + 1500);
-                alan.innerHTML = render();
-            }
-        }
-    };
-    document.getElementById('sonuclar').appendChild(kart);
+    bilgi.innerText = döküm.innerHTML === "" ? "100 harf içinde bulunamadı." : "Tarama bitti.";
 }
 </script>
-<script src="kulliyat_sistem.js"></script>
 </body>
 </html>
