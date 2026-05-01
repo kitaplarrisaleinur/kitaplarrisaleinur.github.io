@@ -106,7 +106,7 @@ function ikizButonlariEkle() {
     btnAc.id = "btnAcma";
     btnAc.innerHTML = '🔍';
     btnAc.style.cssText = `
-        position: fixed; top: 35px; right: 30px; 
+        position: fixed; top: 220px; right: 30px; 
         width: 45px; height: 45px; border-radius: 50%; border: none;
         background: #27ae60; color: white; cursor: pointer; font-size: 18px;
         z-index: 999999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -118,7 +118,7 @@ function ikizButonlariEkle() {
     btnKapat.id = "btnKapama";
     btnKapat.innerHTML = '↕';
     btnKapat.style.cssText = `
-        position: fixed; top: 90px; right: 30px; 
+        position: fixed; top: 275px; right: 30px; 
         width: 45px; height: 45px; border-radius: 50%; border: none;
         background: #34495e; color: white; cursor: pointer; font-size: 20px;
         z-index: 999999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
