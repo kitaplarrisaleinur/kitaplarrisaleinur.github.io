@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nokta Atışı Radar (250 Harf)</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding: 10px; margin: 0; overflow-x: hidden; }
+        
+        .ust-panel { 
+            background: #2c3e50; padding: 15px; border-radius: 15px; 
+            max-width: 600px; margin: 10px auto; border: 2px solid #e67e22; 
+            width: 100%;
+        }
+        
+        input { 
+            width: 100%; padding: 12px; border-radius: 25px; border: none; 
+            font-size: 16px; outline: none; margin-bottom: 15px; display: block;
+            color: #333;
+        }
+        
+        button { 
+            background: #e67e22; color: white; border: none; padding: 12px 20px; 
+            border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 16px; 
+            width: 100%;
+        }
+        
+        .sonuc-karti { 
+            background: white; color: #333; margin: 15px auto; padding: 15px; 
+            border-radius: 12px; text-align: left; border-left: 8px solid #e67e22; 
+            max-width: 600px; width: 100%; line-height: 1.6; box-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+            overflow-wrap: break-word;
+        }
+        
+        mark { background: yellow; color: black; font-weight: bold; padding: 2px 5px; }
+        #bilgi { margin-top: 15px; color: #f1c40f; font-weight: bold; font-size: 14px; }
+        .git-btn { color:#3498db; font-weight:bold; text-decoration:none; cursor:pointer; display:inline-block; margin-top:10px; padding: 10px 0; }
+
+        @media (max-width: 480px) {
+            .sonuc-karti h3 { font-size: 16px; }
+            .sonuc-karti p { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ust-panel">
+    <input type="text" id="aramaInput" placeholder="Kelimeleri yazın (Örn: hakiki iman saadet)">
+    <button onclick="darRadar()">250 HARF MESAFELİ TARA</button>
+    <div id="bilgi">Mesafe: 250 Harf (Grup Araması)</div>
+</div>
+
+<div id="sonucDökümü"></div>
+
+<script>
+async function darRadar() {
+    const girdi = document.getElementById('aramaInput').value.toLocaleLowerCase('tr-TR').trim();
+    const parcalar = girdi.split(/\s+/).filter(k => k.length >= 2);
+    const döküm = document.getElementById('sonucDökümü');
+    const bilgi = document.getElementById('bilgi');
+    
+    döküm.innerHTML = "";
+    if (parcalar.length < 2) { bilgi.innerText = "Grup için en az 2 kelime yazın!"; return; }
+
+    const MAX_MESAFE = 250; 
+    const kitaplar = ["sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html", "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html", "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html", "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html", "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html", "genclik.html", "muhakemat.html", "nurunilkkapisi.html"];
+
+    bilgi.innerText = "Taranıyor...";
+
+    for (let kitap of kitaplar) {
+        try {
+            const res = await fetch(kitap);
+            if (!res.ok) continue;
+            const html = await res.text();
+            
+            const div = document.createElement("div");
+            div.innerHTML = html;
+            const safMetin = div.innerText;
+            const kucukMetin = safMetin.toLocaleLowerCase('tr-TR');
+
+            for (let i = 0; i < kucukMetin.length; i++) {
+                let buldukMu = false;
+                let bulunanIdx = -1;
+
+                for (let p of parcalar) {
+                    if (kucukMetin.startsWith(p, i)) {
+                        bulunanIdx = i;
+                        buldukMu = true;
+                        break;
+                    }
+                }
+
+                if (buldukMu) {
+                    let kesit = kucukMetin.slice(bulunanIdx, bulunanIdx + MAX_MESAFE);
+                    let hepsiBurada = parcalar.every(p => kesit.includes(p));
+
+                    if (hepsiBurada) {
+                        // SADECE NOKTA ATIŞI MIKNATIS (30 HARF)
+                        let miknatis = safMetin.slice(bulunanIdx, bulunanIdx + 30).trim();
+                        let orjinal = safMetin.slice(Math.max(0, bulunanIdx - 30), bulunanIdx + 250);
+                        
+                        let gosterim = orjinal;
+                        parcalar.forEach(p => {
+                            const reg = new RegExp(p, "gi");
+                            gosterim = gosterim.replace(reg, m => `<mark>${m}</mark>`);
+                        });
+
+                        döküm.innerHTML += `
+                            <div class="sonuc-karti">
+                                <h3>📘 ${kitap.toUpperCase().replace('.HTML','')}</h3>
+                                <p>...${gosterim}...</p>
+                                <a onclick="window.open('git.html?kitap=${kitap}&m=${encodeURIComponent(miknatis)}&k=${encodeURIComponent(parcalar.join(','))}', '_blank')" class="git-btn">Kitabı Tam O Noktada Aç ➜</a>
+                            </div>`;
+                        
+                        i = bulunanIdx + MAX_MESAFE; 
+                    }
+                }
+            }
+        } catch (e) {}
+    }
+    bilgi.innerText = döküm.innerHTML === "" ? "Sonuç bulunamadı." : "Tarama bitti.";
+}
+</script>
+<script src="kapatbutonu.js"></script>
+</body>
+</html>

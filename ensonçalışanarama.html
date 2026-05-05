@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Külliyat Detaylı Arama</title>
+    <script src="fihrist.js"></script> 
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; background: #f4f4f4; text-align: center; padding: 10px; margin: 0; overflow-x: hidden; }
+        
+        /* Panel genişliği mobile tam uyumlu yapıldı */
+        .panel { 
+            background: #2c3e50; 
+            padding: 15px; 
+            border-radius: 20px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            max-width: 600px; 
+            width: 100%; /* Telefondaki genişlik */
+            margin: 0 auto;   
+        }
+
+        /* Arama kutusu ve butonun yan yana düzgün durması sağlandı */
+        .arama-kapsayici {
+            display: flex;
+            background: white;
+            border-radius: 30px;
+            padding: 5px;
+            align-items: center;
+            width: 100%;
+        }
+        
+        input { 
+            flex: 1; 
+            padding: 12px 15px; 
+            font-size: 16px; /* Mobilde zoom yapmaması için ideal boyut */
+            border: none; 
+            outline: none; 
+            border-radius: 30px;
+            width: 50%; /* Taşmayı önler */
+        }
+
+        .ara-btn-kucuk {
+            background: #f1c40f;
+            color: #2c3e50;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 5px;
+            white-space: nowrap; /* Yazının butondan taşmasını engeller */
+        }
+
+        .skor { 
+            font-size: 16px; 
+            color: #f1c40f; 
+            margin-top: 15px; 
+            font-weight: bold; 
+            line-height: 1.4;
+            word-wrap: break-word; /* Uzun kelimeler ekranı bozmasın */
+        }
+
+        #sonuclar { 
+            margin-top: 20px; 
+            width: 100%; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Liste elemanları mobilde tam genişlikte */
+        .satir { 
+            background: white; 
+            margin: 8px 0; 
+            padding: 12px; 
+            width: 100%; 
+            max-width: 600px;
+            border-radius: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            cursor: pointer; 
+            font-size: 16px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .satir:hover { background: #e8f4fd; }
+        
+        .kitap-ad { font-weight: bold; color: #333; text-align: left; flex: 1; }
+        
+        .detay-yazi { 
+            font-size: 12px; 
+            color: #7f8c8d; 
+            text-align: left; 
+            margin-top: 4px; 
+            word-break: break-all; /* Detayların taşmasını engeller */
+        }
+
+        .sayi { 
+            color: #2980b9; 
+            font-weight: bold; 
+            margin-left: 10px; 
+            min-width: 35px; 
+            text-align: right; 
+            font-size: 16px;
+        }
+
+        /* Küçük ekranlar için ek ayarlar */
+        @media screen and (max-width: 480px) {
+            .panel { padding: 10px; }
+            input { font-size: 14px; padding: 10px; }
+            .ara-btn-kucuk { padding: 8px 12px; font-size: 13px; }
+            .skor { font-size: 14px; }
+            .satir { font-size: 15px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <div class="arama-kapsayici">
+        <input type="text" id="aramaKutusu" placeholder="Arama yapın..." onkeydown="if(event.key==='Enter') ara()">
+        <button class="ara-btn-kucuk" onclick="ara()">ARA</button>
+    </div>
+    <div id="toplam" class="skor">Toplam: 0</div>
+</div>
+
+<div style="margin-top: 15px; text-align: center; padding: 0 10px;">
+    <button onclick="window.location.href='cokluara.html'" style="
+        background: #f1c40f; 
+        color: #2c3e50; 
+        border: none; 
+        padding: 12px 20px; 
+        border-radius: 20px; 
+        font-weight: bold; 
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-size: 14px;
+        width: 100%;
+        max-width: 600px;
+    ">
+       Çoklu Kelime Arama Kutusuna Git 🚀
+    </button>
+</div>
+
+<div id="sonuclar"></div>
+
+<script>
+// Arama motoru algoritmana dokunulmadı
+const kitapListesi = ["sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html", "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html", "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html", "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html", "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html", "genclik.html", "muhakemat.html", "nurunilkkapisi.html"];
+const kitapGercekAdlari = ["Sözler", "Mektubat 1", "Mektubat 2", "Lem'alar", "Şualar 1", "Şualar 2", "Sıracın Nur", "Zülfikar", "Asayı Musa", "Tılsımlar", "İşaratül İcaz", "Mesnevi Nuriye", "ST Gaybi", "Barla", "Kastamonu", "Emirdağ 1", "Emirdağ 2", "Emirdağ 3", "Emirdağ 4", "Hanımlar Rehberi", "Gençlik Rehberi", "Muhakemat", "Nurun İlk Kapısı"];
+
+function ara() {
+    let arananTam = document.getElementById('aramaKutusu').value.toLocaleLowerCase('tr-TR').trim();
+    let kelimeler = arananTam.split(/\s+/).filter(k => k.length >= 2);
+    let divSonuc = document.getElementById('sonuclar');
+    let divToplam = document.getElementById('toplam');
+    
+    divSonuc.innerHTML = "";
+    let kitapDetaylari = {}; 
+    let genelKelimeToplamlari = {};
+
+    if (kelimeler.length === 0) {
+        divToplam.innerText = "Toplam: 0";
+        return;
+    }
+
+    kelimeler.forEach(k => genelKelimeToplamlari[k] = 0);
+
+    for (let anahtar in fihrist) {
+        let kucukAnahtar = anahtar.toLocaleLowerCase('tr-TR');
+        kelimeler.forEach(kelime => {
+            if (kucukAnahtar.startsWith(kelime)) {
+                for (let kitap in fihrist[anahtar]) {
+                    if (!kitapDetaylari[kitap]) kitapDetaylari[kitap] = {};
+                    if (!kitapDetaylari[kitap][kelime]) kitapDetaylari[kitap][kelime] = 0;
+                    let adet = fihrist[anahtar][kitap];
+                    kitapDetaylari[kitap][kelime] += adet;
+                    genelKelimeToplamlari[kelime] += adet;
+                }
+            }
+        });
+    }
+
+    kitapListesi.forEach((kitap, index) => {
+        let ad = kitapGercekAdlari[index];
+        let detayYazisi = "";
+        let kitapToplami = 0;
+
+        if (kitapDetaylari[kitap]) {
+            for (let kelime in kitapDetaylari[kitap]) {
+                let sayi = kitapDetaylari[kitap][kelime];
+                detayYazisi += `${kelime}: ${sayi} | `;
+                kitapToplami += sayi;
+            }
+            detayYazisi = detayYazisi.slice(0, -3);
+        } else {
+            detayYazisi = "Sonuç yok";
+            kitapToplami = 0;
+        }
+
+        divSonuc.innerHTML += `
+            <div class="satir" style="opacity: ${kitapToplami === 0 ? '0.5' : '1'}" onclick="window.location.href='${kitap}?ara=${encodeURIComponent(arananTam)}'">
+                <div>
+                    <div class="kitap-ad">${ad}</div>
+                    <div class="detay-yazi">${detayYazisi}</div>
+                </div>
+                <span class="sayi">${kitapToplami}</span>
+            </div>`;
+    });
+
+    let genelYazi = "";
+    for (let kelime in genelKelimeToplamlari) {
+        genelYazi += `${kelime} (${genelKelimeToplamlari[kelime]})  `;
+    }
+    divToplam.innerText = genelYazi || "Toplam: 0";
+}
+</script>
+<script src="kapatbutonu.js"></script>
+</body>
+</html>
