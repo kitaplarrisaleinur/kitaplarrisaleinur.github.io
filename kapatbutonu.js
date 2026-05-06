@@ -5,7 +5,7 @@
     style.innerHTML = `
         .ozel-kapat-btn {
             position: fixed !important;
-            top: 145px !important;    /* Senin ölçün */
+            top: 175px !important;    /* Senin ölçün */
             right: 45px !important;   /* Senin ölçün */
             width: 50px !important;
             height: 50px !important;

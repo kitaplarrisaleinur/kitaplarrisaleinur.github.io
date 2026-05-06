@@ -60,7 +60,12 @@
        <button class="yardim-btn" onclick="yardimAc()">?</button>
     </div>
     <div id="bilgi">Hazır</div>
+    
 </div>
+
+
+
+
 
 <!-- Yardım Modalı -->
 <div id="yardimModal" class="modal">
@@ -204,32 +209,79 @@ async function grupRadarArama(girdi) {
     document.getElementById('bilgi').innerText = "Tarama Bitti";
 }
 
+
+// ==========================================
+// 3. ARDIŞIK ARAMA - (İnce Liste ve Bul.html Yönlendirmesi)
+// ==========================================
+
+// ==========================================
+// 3. ARDIŞIK ARAMA - (Tam Liste ve Akıllı Çanta Tek Parça)
+// ==========================================
 async function ardisikBlokArama(girdi) {
     const parcalar = girdi.split(/\s+/).filter(k => k.length >= 2);
     if (parcalar.length < 1) return;
     const pattern = parcalar.map(p => p + "[^\\s]*").join("\\s+");
     const regex = new RegExp(pattern, "gi");
-    for (let kitap of kitapListesi) {
+    let genelToplam = 0;
+
+    // 1. BOŞ ÇANTA: Sadece sonuç bulunan kitapları burada biriktireceğiz
+    let bulunanlarListesi = [];
+    let geciciSonuclar = [];
+
+    // ÖNCE TARAMA YAPIYORUZ
+    for (let i = 0; i < kitapListesi.length; i++) {
+        let kitap = kitapListesi[i];
+        let ad = kitapGercekAdlari[i];
         try {
             const res = await fetch(kitap);
             const html = await res.text();
-            const div = document.createElement("div"); div.innerHTML = html;
-            const safMetin = div.innerText;
-            const kucukMetin = safMetin.toLocaleLowerCase('tr-TR');
+            const div = document.createElement("div"); 
+            div.innerHTML = html;
+            const kucukMetin = div.innerText.toLocaleLowerCase('tr-TR');
+            
+            let adet = 0;
             let match;
             while ((match = regex.exec(kucukMetin)) !== null) {
-                let start = match.index;
-                let end = regex.lastIndex;
-                let gosterim = safMetin.slice(Math.max(0, start - 40), Math.min(safMetin.length, end + 150));
-                let miknatis = safMetin.slice(start, end).trim();
-                let vurguluGosterim = gosterim.replace(new RegExp(pattern, "gi"), m => `<mark>${m}</mark>`);
-                document.getElementById('sonucDökümü').innerHTML += `<div class="sonuc-karti"><h3>📘 ${kitap.toUpperCase().replace('.HTML','')}</h3><p>...${vurguluGosterim}...</p><a onclick="window.open('git.html?kitap=${kitap}&m=${encodeURIComponent(miknatis)}&k=${encodeURIComponent(parcalar.join(','))}', '_blank')" class="git-btn">Kitabı Aç ➜</a></div>`;
+                adet++;
                 if (regex.lastIndex === match.index) regex.lastIndex++;
             }
-        } catch (e) {}
+
+            if (adet > 0) {
+                genelToplam += adet;
+                // SADECE DOLU OLANLARI LİSTEYE EKLE
+                bulunanlarListesi.push(kitap);
+                // Sonuçları ekrana basmadan önce hafızada biriktiriyoruz
+                geciciSonuclar.push({ kitap, ad, adet });
+            }
+        } catch (e) { console.error(kitap + " okunamadı."); }
     }
-    document.getElementById('bilgi').innerText = "Ardışık Tarama Bitti";
+
+    // 2. LİSTELEME: Tarama bitti, şimdi sadece dolu kitapları çantaya koyup ekrana basıyoruz
+    const canta = bulunanlarListesi.join(',');
+    
+    geciciSonuclar.forEach((sonuc, index) => {
+        document.getElementById('sonucDökümü').innerHTML += `
+            <div class="satir" onclick="window.location.href='bul.html?kitap=${sonuc.kitap}&ara=${encodeURIComponent(girdi)}&sira=${index}&liste=${canta}'">
+                <div>
+                    <div style="font-weight:bold">${sonuc.ad}</div>
+                    <div class="detay-yazi">"${girdi}" tam kalıbı bulundu</div>
+                </div>
+                <span class="sayi">${sonuc.adet}</span>
+            </div>`;
+    });
+
+    document.getElementById('bilgi').innerText = `Ardışık Tarama Bitti. Toplam: ${genelToplam}`;
 }
+
+
+
+
+
+// ==========================================
+// 3. ARDIŞIK ARAMA BİTİŞ
+// ==========================================
+
 </script>
+<script src="kapatbutonu.js"></script>
 </body>
 </html>
