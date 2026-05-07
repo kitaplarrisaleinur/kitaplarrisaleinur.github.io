@@ -151,3 +151,6 @@ details > details > details > details > details > summary { background: #3EB6FF;
   .arabi { font-size: 1.4rem; line-height: 1.8; }
   summary { font-size: 1.1rem; }
 }
+.red{
+  color: red;
+}
