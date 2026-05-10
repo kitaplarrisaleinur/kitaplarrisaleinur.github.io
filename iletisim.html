@@ -2,60 +2,72 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İletişim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İletişim & Geri Bildirim</title>
+    
+    <script>
+        /* AYARLAR: Harf sınırlarını buradan kolayca değiştirebilirsin abi */
+        const ALT_SINIR = 20;   // En az harf
+        const UST_SINIR = 500;  // En fazla harf
+    </script>
+
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
-        .paneli { background: #2c3e50; padding: 25px; border-radius: 20px; border: 2px solid #e67e22; width: 100%; max-width: 450px; text-align: center; }
-        input, textarea { width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 16px; box-sizing: border-box; outline: none; background: #f9f9f9; color: #333; margin-bottom: 12px; }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; }
+        .paneli { background: #2c3e50; padding: 25px; border-radius: 20px; border: 2px solid #e67e22; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: #e67e22; margin-top: 0; }
+        input, textarea { width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 16px; box-sizing: border-box; outline: none; background: #f9f9f9; color: #333; margin-bottom: 12px; font-family: sans-serif; }
         textarea { height: 130px; resize: none; }
-        .gonder-btn { background: #e67e22; color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 18px; opacity: 0.5; }
+        
+        /* Butonun pasif (dondurulmuş) hali */
+        .gonder-btn { background: #e67e22; color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: not-allowed; font-size: 18px; opacity: 0.3; pointer-events: none; transition: 0.3s; }
+        
+        /* Butonun aktif (parlayan) hali */
+        .gonder-btn.aktif { opacity: 1; cursor: pointer; pointer-events: auto; }
+        .gonder-btn.aktif:hover { background: #d35400; }
+
         .sayac { text-align: right; font-size: 12px; color: #f1c40f; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="paneli">
-    <h2 style="color:#e67e22; margin-top:0;">Geri Bildirim</h2>
+    <h2>Geri Bildirim</h2>
     
-    <!-- FORMSPREE TEMEL KODU -->
-    <form action="https://formspree.io" method="POST">
+    <!-- Formspree'nin orijinal 'maqvlprg' mühürlü temel yapısı -->
+    <form action="https://formspree.io/f/maqvlprg" method="POST">
         
-        <input type="text" name="isim_rumuz" placeholder="İsim veya Konu (İsteğe Bağlı)">
+        <input type="text" name="isim_rumuz" placeholder="Adınız, Rumuz veya Konu (İsteğe Bağlı)">
         <input type="email" name="email" placeholder="E-posta Adresiniz (İsteğe Bağlı)">
         
-        <!-- Formspree'nin beklediği 'message' ismi mecburidir -->
+        <!-- Orijinal 'message' ismini aynen koruduk -->
         <textarea name="message" id="mektup" placeholder="Mesajınızı buraya yazın..." required oninput="kontrolEt()"></textarea>
         
         <div class="sayac" id="karakter">0 / 500 harf (En az 20)</div>
         
-        <button type="submit" class="gonder-btn" id="btn" disabled>MESAJI İLET</button>
+        <button type="submit" class="gonder-btn" id="btnGonder">MESAJI İLET</button>
     </form>
-    
+
     <a href="index.html" style="display:inline-block; margin-top:15px; color:#bdc3c7; text-decoration:underline; font-size:14px;">Vazgeç</a>
 </div>
 
 <script>
-    const ALT = 20; 
-    const UST = 500;
-    const mektup = document.getElementById('mektup');
-    const btn = document.getElementById('btn');
-    const sayac = document.getElementById('karakter');
+    const mektupKutusu = document.getElementById('mektup');
+    const gonderBtn = document.getElementById('btnGonder');
+    const sayacElemani = document.getElementById('karakter');
+
+    mektupKutusu.maxLength = UST_SINIR;
 
     function kontrolEt() {
-        const uzunluk = mektup.value.length;
-        sayac.innerText = uzunluk + " / " + UST + " harf " + (uzunluk < ALT ? "(En az " + ALT + ")" : "");
+        const uzunluk = mektupKutusu.value.length;
+        sayacElemani.innerText = uzunluk + " / " + UST_SINIR + " harf" + (uzunluk < ALT_SINIR ? " (En az " + ALT_SINIR + ")" : "");
         
-        if (uzunluk >= ALT && uzunluk <= UST) {
-            btn.disabled = false;
-            btn.style.opacity = "1";
-            btn.style.cursor = "pointer";
-            sayac.style.color = "#f1c40f";
+        // 20-500 barajı geçilince butonu yak
+        if (uzunluk >= ALT_SINIR && uzunluk <= UST_SINIR) {
+            sayacElemani.style.color = "#f1c40f"; 
+            gonderBtn.classList.add('aktif');     
         } else {
-            btn.disabled = true;
-            btn.style.opacity = "0.5";
-            btn.style.cursor = "not-allowed";
-            sayac.style.color = "#e74c3c";
+            sayacElemani.style.color = "#e74c3c"; 
+            gonderBtn.classList.remove('aktif');  
         }
     }
 </script>
