@@ -108,6 +108,13 @@ mark {
     }
 }
 
+.modal-icerik h3 {
+    color: #d93025; /* Kırmızı renk */
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee; /* Altına ince bir çizgi */
+    padding-bottom: 3px;
+}
 
     
     </style>
@@ -135,13 +142,18 @@ mark {
 <div id="yardimModal" class="modal">
     <div class="modal-icerik">
         <h2>Arama Modları Yardımı</h2>
-        <h3>1. Sıralı Arama</h3>
-        <p>Yazdığınız kelimeleri fihrist üzerinden tek tek tarar.</p>
-        <h3>2. Ardışık Arama</h3>
-        <p>Yazdığınız kelimeleri tam olarak yan yana arar.</p>
+
+        <h3>1. Ardışık Arama</h3>
+        <p>"üçüncü bir said" "her hayrın başıdır" gibi</p>
+        
+        <h3>2. Sıralı Arama</h3>
+        <p>"nefs nefis" "iman islam" veya "akıl akil kalb ruh" gibi.</p>
+        <p> Ardışık ve Sıralı da 1-2-3-4 kelime arayabilirsiniz. fazlası yavaş olabilir.
+        Kitaplarda şapkalı harfler yoktur.</p>
         <h3>3. Grup Araması</h3>
-        <p>Kelimelerin aynı paragrafta olup olmadığına bakar.</p>
-        <button class="kapat-btn" onclick="yardimKapat()">ANLADIM, KAPAT</button>
+        <p>250 harf içinde arar." divane dinsiz ecnebi" gibi</p>
+
+        <button class="kapat-btn" onclick="yardimKapat()">KAPAT</button>
     </div>
 </div>
 
