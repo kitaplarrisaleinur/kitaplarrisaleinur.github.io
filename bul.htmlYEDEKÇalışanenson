@@ -10,36 +10,29 @@
         iframe { width: 100%; height: 100vh; border: none; background: white; display: block; }
         
         #ust-nav-paneli {
-            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
-            background: white; padding: 10px 20px; border-radius: 40px;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: white; padding: 12px 25px; border-radius: 40px;
             display: flex; align-items: center; justify-content: space-between;
-            min-width: 280px; z-index: 9999999; box-shadow: 0 8px 25px rgba(0,0,0,0.2); border: 1px solid #ececec;
+            min-width: 320px; z-index: 9999999; box-shadow: 0 8px 25px rgba(0,0,0,0.2); border: 1px solid #ececec;
         }
 
-        .sol-bilgi { display: flex; flex-direction: column; text-align: left; overflow: hidden; }
-        .kitap-adi { font-family: sans-serif; font-weight: bold; font-size: 11px; color: #333; margin-bottom: 2px; white-space: nowrap; }
-        .aranan-ve-sayac { font-family: sans-serif; font-weight: bold; font-size: 15px; color: #d93025; white-space: nowrap; }
-        .sag-butonlar { display: flex; gap: 8px; align-items: center; }
+        .sol-bilgi { display: flex; flex-direction: column; text-align: left; }
+        .kitap-adi { font-family: sans-serif; font-weight: bold; font-size: 13px; color: #333; margin-bottom: 2px; }
+        .aranan-ve-sayac { font-family: sans-serif; font-weight: bold; font-size: 17px; color: #d93025; }
+        .sag-butonlar { display: flex; gap: 10px; align-items: center; }
 
         .nav-btn {
-            width: 38px; height: 38px; background: white; border: 1px solid #e0e0e0;
+            width: 42px; height: 42px; background: white; border: 1px solid #e0e0e0;
             border-radius: 50%; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            justify-content: center; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .nav-btn:hover { background: #f5f5f5; }
 
         .ust-kapat-btn {
-            position: fixed; bottom: 30px; right: 20px; width: 50px; height: 50px;    
+            position: fixed; top: 145px; right: 45px; width: 45px; height: 45px;    
             z-index: 9999; background: #d93025; color: white; border: none; border-radius: 50%;
-            font-weight: bold; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            font-weight: bold; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             display: flex; align-items: center; justify-content: center; text-decoration: none;
-        }
-
-        /* TELEFONLARDA NAVİGASYONU VE KAPAT BUTONUNU AYARLAR */
-        @media screen and (max-width: 600px) {
-            #ust-nav-paneli { top: 10px; padding: 8px 15px; min-width: 85%; }
-            .aranan-ve-sayac { font-size: 14px; }
-            .ust-kapat-btn { bottom: 20px; right: 15px; width: 45px; height: 45px; }
         }
     </style>
 </head>
@@ -90,22 +83,20 @@
                 const doc = iframe.contentDocument || iframe.contentWindow.document;
                 const stil = doc.createElement('style');
                 
-                // MOBİLDE YAZI BOYUTUNU VE BOŞLUĞU AYARLAR
+                // --- MÜZAKERE EDİLEN GENİŞLİK AYARLARI ---
                 stil.innerHTML = `
                     body { 
-                        font-size: 20px !important; 
-                        line-height: 1.6 !important; 
-                        padding: 85px 12px 40px 12px !important; 
+                        font-size: 22px !important; 
+                        line-height: 1.7 !important; 
+                        /* Üstten 70px (paneli kurtarır), Sağ-Sol sadece 10px */
+                        padding: 70px 10px 40px 10px !important; 
                         background-color: white !important; 
                         margin: 0 !important;
                         width: auto !important;
                         max-width: 100% !important;
-                        text-align: justify;
-                        word-wrap: break-word;
+                        text-align: justify; /* Sağ taraftaki boşluğu bitirir */
                     }
-                    @media screen and (max-width: 600px) {
-                        body { font-size: 18px !important; padding-top: 75px !important; }
-                    }
+                    /* Kitap içindeki kapsayıcıları tam genişliğe zorlar */
                     div, p, section, article { 
                         width: 100% !important; 
                         max-width: 100% !important; 
@@ -114,7 +105,7 @@
                     }
                     [class*="settings"], [id*="settings"], [class*="menu"], [id*="menu"], button { display: none !important; }
                     mark { background: #ffeb3b !important; color: black !important; font-weight: bold; border-radius: 4px; padding: 0 2px; }
-                    mark.aktif { background: #e67e22 !important; color: white !important; outline: none !important; border: none !important; }
+                   mark.aktif { background: #e67e22 !important; color: white !important; outline: none !important; border: none !important; }
                 `;
                 doc.head.appendChild(stil);
 

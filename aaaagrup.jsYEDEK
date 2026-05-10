@@ -1,0 +1,51 @@
+async function grupRadarArama(girdi) {
+    const parcalar = girdi.split(/\s+/).filter(k => k.length >= 2);
+    if (parcalar.length < 2) { 
+        document.getElementById('bilgi').innerText = "En az 2 kelime!"; 
+        return; 
+    }
+    
+    for (let kitap of kitapListesi) {
+        try {
+            const res = await fetch(kitap);
+            const html = await res.text();
+            const div = document.createElement("div"); 
+            div.innerHTML = html;
+            const safMetin = div.innerText;
+            const kucukMetin = safMetin.toLocaleLowerCase('tr-TR');
+            
+            for (let i = 0; i < kucukMetin.length; i++) {
+                let foundIdx = -1;
+                for (let p of parcalar) { 
+                    if (kucukMetin.startsWith(p, i)) { 
+                        foundIdx = i; 
+                        break; 
+                    } 
+                }
+                
+                if (foundIdx !== -1) {
+                    let kesit = kucukMetin.slice(foundIdx, foundIdx + 250);
+                    if (parcalar.every(p => kesit.includes(p))) {
+                        let miknatis = safMetin.slice(foundIdx, foundIdx + 30).trim();
+                        let gosterim = safMetin.slice(Math.max(0, foundIdx - 30), foundIdx + 250);
+                        
+                        parcalar.forEach(p => { 
+                            gosterim = gosterim.replace(new RegExp(p, "gi"), m => `<mark>${m}</mark>`); 
+                        });
+                        
+                        document.getElementById('sonucDökümü').innerHTML += `
+                            <div class="sonuc-karti">
+                                <h3>📘 ${kitap.toUpperCase().replace('.HTML','')}</h3>
+                                <p>...${gosterim}...</p>
+                                <a onclick="window.open('git.html?kitap=${kitap}&m=${encodeURIComponent(miknatis)}&k=${encodeURIComponent(parcalar.join(','))}', '_blank')" class="git-btn">Kitabı Aç ➜</a>
+                            </div>`;
+                        i = foundIdx + 250; // Aynı blok içinde tekrar arama yapmaması için atlıyoruz
+                    }
+                }
+            }
+        } catch (e) {
+            console.error(kitap + " taranırken hata oluştu.");
+        }
+    }
+    document.getElementById('bilgi').innerText = "Tarama Bitti";
+}

@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Külliyat Arama Motoru</title>
+    <!-- Harici Veri ve Stil Bağlantıları -->
     <script src="fihrist.js"></script> 
+    <link rel="stylesheet" href="stil.css"> <!-- Eğer stilleri de ayırmak istersen -->
+    
     <style>
+        /* Stil kodlarını burada tutabilir veya harici CSS yapabilirsin */
         * { box-sizing: border-box; }
         body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding: 10px; margin: 0; }
         .ana-panel { background: #2c3e50; padding: 20px; border-radius: 20px; max-width: 600px; margin: 10px auto; border: 2px solid #e67e22; position: relative; }
@@ -16,31 +20,96 @@
         #gecmisListesi { position: absolute; top: 48px; left: 10px; right: 10px; background: #ffffff; color: #333; border-radius: 0 0 15px 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); display: none; z-index: 5; text-align: left; border: 1px solid #ddd; border-top: none; max-height: 250px; overflow-y: auto; }
         .gecmis-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 16px; }
         .gecmis-item:hover { background: #f1f1f1; color: #e67e22; }
-        
-        /* Radyo butonları ve Yardım butonu alanı */
         .mod-secici { margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 15px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 15px; flex-wrap: wrap; }
         .mod-secici label { cursor: pointer; font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
         input[type="radio"] { width: 1.8rem; height: 1.8rem; accent-color: #e67e22; cursor: pointer; margin: 0; }
         input[type="radio"]:checked + span { color: #f1c40f; }
-
-        /* Yardım Butonu Stili */
         .yardim-btn { width: 1.8rem; height: 1.8rem; background: #e67e22; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 16px; border: none; transition: transform 0.2s; }
-        .yardim-btn:hover { transform: scale(1.1); background: #f39c12; }
-
-        /* Modal (Yardım Penceresi) Stilleri */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
         .modal-icerik { background: #2c3e50; padding: 25px; border-radius: 20px; border: 2px solid #e67e22; max-width: 500px; width: 90%; text-align: left; line-height: 1.6; position: relative; }
-        .modal-icerik h2 { color: #f1c40f; margin-top: 0; text-align: center; }
-        .modal-icerik h3 { color: #e67e22; margin-bottom: 5px; }
-        .modal-icerik p { margin-bottom: 15px; font-size: 15px; }
         .kapat-btn { display: block; width: 100%; background: #e67e22; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
-
         #bilgi { margin-top: 15px; color: #f1c40f; font-size: 14px; font-weight: bold; min-height: 20px; }
         #sonucDökümü { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
         .satir { background: white; margin: 8px 0; padding: 12px; width: 100%; max-width: 600px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #333; text-align: left; }
-        .sonuc-karti { background: white; color: #333; margin: 10px 0; padding: 15px; border-radius: 12px; text-align: left; border-left: 8px solid #e67e22; width: 100%; max-width: 600px; line-height: 1.6; }
-        mark { background: yellow; color: black; font-weight: bold; padding: 0 2px; }
-        .git-btn { color:#3498db; font-weight:bold; text-decoration:none; cursor:pointer; display:inline-block; margin-top:10px; }
+    
+    
+    
+
+        /* Grup Araması Önizleme Kutusu */
+.sonuc-karti { 
+    background: white; 
+    color: #333; 
+    margin: 15px auto; 
+    padding: 20px; 
+    border-radius: 15px; 
+    text-align: left; 
+    border-left: 8px solid #e67e22; /* Senin meşhur turuncu şeridin */
+    width: 95%; 
+    max-width: 600px; /* Yazıların sağa uzamasını engelleyen kilit ayar */
+    line-height: 1.6; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    word-wrap: break-word; /* Uzun kelimelerin kutuyu patlatmasını engeller */
+}
+
+.sonuc-karti h3 { 
+    margin-top: 0; 
+    color: #2c3e50; 
+    font-size: 15px; 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 5px; 
+}
+
+.sonuc-karti p { 
+    font-size: 14px; 
+    margin: 10px 0; 
+    color: #444;
+}
+
+.git-btn { 
+    color: #3498db; 
+    font-weight: bold; 
+    text-decoration: none; 
+    cursor: pointer; 
+    display: inline-block; 
+    margin-top: 5px; 
+    font-size: 14px;
+}
+
+/* Önizleme içindeki sarı vurgular */
+mark { 
+    background: #ffeb3b; 
+    padding: 0 2px; 
+    border-radius: 3px; 
+}
+
+    
+    
+/* TELEFONLAR İÇİN ÖZEL AYARLAR */
+@media screen and (max-width: 600px) {
+    .ana-panel {
+        width: 95%;
+        padding: 15px;
+        margin: 5px auto;
+    }
+    
+    input#aramaInput {
+        font-size: 14px; /* Mobilde klavye açılınca ekranın zıplamasını engeller */
+    }
+
+    .mod-secici label {
+        font-size: 14px; /* Seçenekleri biraz küçültelim ki yan yana sığsın */
+        gap: 4px;
+    }
+
+    .sonuc-karti, .satir {
+        width: 100% !important;
+        border-radius: 10px;
+        padding: 15px;
+    }
+}
+
+
+    
     </style>
 </head>
 <body>
@@ -60,228 +129,31 @@
        <button class="yardim-btn" onclick="yardimAc()">?</button>
     </div>
     <div id="bilgi">Hazır</div>
-    
 </div>
-
-
-
-
 
 <!-- Yardım Modalı -->
 <div id="yardimModal" class="modal">
     <div class="modal-icerik">
         <h2>Arama Modları Yardımı</h2>
-        
         <h3>1. Sıralı Arama</h3>
-        <p>Yazdığınız kelimeleri fihrist üzerinden tek tek tarar. Her kitabın içinde bu kelimelerin kaçar kez geçtiğini bir liste halinde gösterir.</p>
-
+        <p>Yazdığınız kelimeleri fihrist üzerinden tek tek tarar.</p>
         <h3>2. Ardışık Arama</h3>
-        <p>Yazdığınız kelimeleri tam olarak verdiğiniz sırayla yan yana arar. Kelimelerin ek alıp almadığını kontrol ederek cümle içindeki tam eşleşmeyi bulur.</p>
-
+        <p>Yazdığınız kelimeleri tam olarak yan yana arar.</p>
         <h3>3. Grup Araması</h3>
-        <p>Yazdığınız tüm kelimelerin aynı 250 karakterlik blok (yaklaşık bir paragraf) içerisinde geçip geçmediğine bakar. Kelimelerin sırası önemli değildir.</p>
-
+        <p>Kelimelerin aynı paragrafta olup olmadığına bakar.</p>
         <button class="kapat-btn" onclick="yardimKapat()">ANLADIM, KAPAT</button>
     </div>
 </div>
 
 <div id="sonucDökümü"></div>
 
-<script>
-const kitapListesi = ["sozler.html", "mektubat1.html", "mektubat2.html", "lemalar.html", "sualar1.html", "sualar2.html", "siracunnur.html", "zulfikar.html", "asayimusa.html", "tilsimlar.html", "isaratulicaz.html", "mesnevinuriye.html", "stgaybi.html", "barla.html", "kastamonu.html", "emirdag1.html", "emirdag2.html", "emirdag3.html", "emirdag4.html", "hanimlar.html", "genclik.html", "muhakemat.html", "nurunilkkapisi.html"];
-const kitapGercekAdlari = ["Sözler", "Mektubat 1", "Mektubat 2", "Lem'alar", "Şualar 1", "Şualar 2", "Sıracın Nur", "Zülfikar", "Asayı Musa", "Tılsımlar", "İşaratül İcaz", "Mesnevi Nuriye", "ST Gaybi", "Barla", "Kastamonu", "Emirdağ 1", "Emirdağ 2", "Emirdağ 3", "Emirdağ 4", "Hanımlar Rehberi", "Gençlik Rehberi", "Muhakemat", "Nurun İlk Kapısı"];
+<!-- TÜM JAVASCRIPT MANTIĞI DIŞ DOSYALARA TAŞINDI -->
+<script src="aaaaayarlar.js"></script> <!-- Sabit listeler buraya -->
+<script src="aaaasirali.js"></script>
+<script src="aaaaardisik.js"></script>
+<script src="aaaagrup.js"></script>
+<script src="aaaayardimci.js"></script> <!-- Arayüz kontrolleri buraya -->
+<script src="aaaakapatbutonu.js"></script>
 
-// Yardım Penceresi Fonksiyonları
-function yardimAc() { document.getElementById('yardimModal').style.display = "flex"; }
-function yardimKapat() { document.getElementById('yardimModal').style.display = "none"; }
-window.onclick = function(event) { if (event.target == document.getElementById('yardimModal')) yardimKapat(); }
-
-function gecmisKaydet(kelime, mod) {
-    let key = "arama_gecmis"; 
-    let gecmis = JSON.parse(localStorage.getItem(key) || "[]");
-    gecmis = gecmis.filter(k => k !== kelime);
-    gecmis.unshift(kelime);
-    if (gecmis.length > 8) gecmis.pop();
-    localStorage.setItem(key, JSON.stringify(gecmis));
-}
-
-function gecmisGoster() {
-    const key = "arama_gecmis";
-    const gecmis = JSON.parse(localStorage.getItem(key) || "[]");
-    const listeDiv = document.getElementById('gecmisListesi');
-    if (gecmis.length === 0) { listeDiv.style.display = "none"; return; }
-    listeDiv.innerHTML = "";
-    gecmis.forEach(kelime => {
-        let item = document.createElement('div');
-        item.className = "gecmis-item";
-        item.innerHTML = "🕒 " + kelime;
-        item.onmousedown = () => { 
-            document.getElementById('aramaInput').value = kelime; 
-            listeDiv.style.display = "none"; 
-        };
-        listeDiv.appendChild(item);
-    });
-    listeDiv.style.display = "block";
-}
-
-function modDegisti() { document.getElementById('sonucDökümü').innerHTML = ""; document.getElementById('bilgi').innerText = ""; gecmisGoster(); }
-document.getElementById('aramaInput').onblur = () => { setTimeout(() => { document.getElementById('gecmisListesi').style.display = "none"; }, 200); };
-
-async function anaAramaMotoru() {
-    const girdi = document.getElementById('aramaInput').value.toLocaleLowerCase('tr-TR').trim();
-    const seciliMod = document.querySelector('input[name="mod"]:checked').value;
-    if (girdi.length < 2) return;
-    gecmisKaydet(girdi, seciliMod);
-    document.getElementById('gecmisListesi').style.display = "none";
-    document.getElementById('sonucDökümü').innerHTML = "";
-    document.getElementById('bilgi').innerText = "Aranıyor...";
-
-    if (seciliMod === "sirali") {
-        siraliFihristArama(girdi);
-    } else if (seciliMod === "grup") {
-        await grupRadarArama(girdi);
-    } else if (seciliMod === "ardisik") {
-        await ardisikBlokArama(girdi);
-    }
-}
-
-function siraliFihristArama(arananTam) {
-    let kelimeler = arananTam.split(/\s+/).filter(k => k.length >= 2);
-    let kitapDetaylari = {}; let genelKelimeToplamlari = {};
-    kelimeler.forEach(k => genelKelimeToplamlari[k] = 0);
-    for (let anahtar in fihrist) {
-        let kucukAnahtar = anahtar.toLocaleLowerCase('tr-TR');
-        kelimeler.forEach(kelime => {
-            if (kucukAnahtar.startsWith(kelime)) {
-                for (let kitap in fihrist[anahtar]) {
-                    if (!kitapDetaylari[kitap]) kitapDetaylari[kitap] = {};
-                    if (!kitapDetaylari[kitap][kelime]) kitapDetaylari[kitap][kelime] = 0;
-                    let adet = fihrist[anahtar][kitap];
-                    kitapDetaylari[kitap][kelime] += adet;
-                    genelKelimeToplamlari[kelime] += adet;
-                }
-            }
-        });
-    }
-    kitapListesi.forEach((kitap, index) => {
-        let ad = kitapGercekAdlari[index];
-        let detayYazisi = ""; let kitapToplami = 0;
-        if (kitapDetaylari[kitap]) {
-            for (let kelime in kitapDetaylari[kitap]) {
-                let sayi = kitapDetaylari[kitap][kelime];
-                detayYazisi += `${kelime}: ${sayi} | `;
-                kitapToplami += sayi;
-            }
-            detayYazisi = detayYazisi.slice(0, -3);
-        } else { detayYazisi = "Sonuç yok"; }
-        document.getElementById('sonucDökümü').innerHTML += `<div class="satir" style="opacity: ${kitapToplami === 0 ? '0.5' : '1'}" onclick="window.location.href='${kitap}?ara=${encodeURIComponent(arananTam)}'"><div><div style="font-weight:bold">${ad}</div><div class="detay-yazi">${detayYazisi}</div></div><span class="sayi">${kitapToplami}</span></div>`;
-    });
-    let gYazi = ""; for (let k in genelKelimeToplamlari) { gYazi += `${k} (${genelKelimeToplamlari[k]}) `; }
-    document.getElementById('bilgi').innerText = gYazi || "Sonuç yok";
-}
-
-async function grupRadarArama(girdi) {
-    const parcalar = girdi.split(/\s+/).filter(k => k.length >= 2);
-    if (parcalar.length < 2) { document.getElementById('bilgi').innerText = "En az 2 kelime!"; return; }
-    for (let kitap of kitapListesi) {
-        try {
-            const res = await fetch(kitap);
-            const html = await res.text();
-            const div = document.createElement("div"); div.innerHTML = html;
-            const safMetin = div.innerText;
-            const kucukMetin = safMetin.toLocaleLowerCase('tr-TR');
-            for (let i = 0; i < kucukMetin.length; i++) {
-                let foundIdx = -1;
-                for (let p of parcalar) { if (kucukMetin.startsWith(p, i)) { foundIdx = i; break; } }
-                if (foundIdx !== -1) {
-                    let kesit = kucukMetin.slice(foundIdx, foundIdx + 250);
-                    if (parcalar.every(p => kesit.includes(p))) {
-                        let miknatis = safMetin.slice(foundIdx, foundIdx + 30).trim();
-                        let gosterim = safMetin.slice(Math.max(0, foundIdx - 30), foundIdx + 250);
-                        parcalar.forEach(p => { gosterim = gosterim.replace(new RegExp(p, "gi"), m => `<mark>${m}</mark>`); });
-                        document.getElementById('sonucDökümü').innerHTML += `<div class="sonuc-karti"><h3>📘 ${kitap.toUpperCase().replace('.HTML','')}</h3><p>...${gosterim}...</p><a onclick="window.open('git.html?kitap=${kitap}&m=${encodeURIComponent(miknatis)}&k=${encodeURIComponent(parcalar.join(','))}', '_blank')" class="git-btn">Kitabı Aç ➜</a></div>`;
-                        i = foundIdx + 250;
-                    }
-                }
-            }
-        } catch (e) {}
-    }
-    document.getElementById('bilgi').innerText = "Tarama Bitti";
-}
-
-
-// ==========================================
-// 3. ARDIŞIK ARAMA - (İnce Liste ve Bul.html Yönlendirmesi)
-// ==========================================
-
-// ==========================================
-// 3. ARDIŞIK ARAMA - (Tam Liste ve Akıllı Çanta Tek Parça)
-// ==========================================
-async function ardisikBlokArama(girdi) {
-    const parcalar = girdi.split(/\s+/).filter(k => k.length >= 2);
-    if (parcalar.length < 1) return;
-    const pattern = parcalar.map(p => p + "[^\\s]*").join("\\s+");
-    const regex = new RegExp(pattern, "gi");
-    let genelToplam = 0;
-
-    // 1. BOŞ ÇANTA: Sadece sonuç bulunan kitapları burada biriktireceğiz
-    let bulunanlarListesi = [];
-    let geciciSonuclar = [];
-
-    // ÖNCE TARAMA YAPIYORUZ
-    for (let i = 0; i < kitapListesi.length; i++) {
-        let kitap = kitapListesi[i];
-        let ad = kitapGercekAdlari[i];
-        try {
-            const res = await fetch(kitap);
-            const html = await res.text();
-            const div = document.createElement("div"); 
-            div.innerHTML = html;
-            const kucukMetin = div.innerText.toLocaleLowerCase('tr-TR');
-            
-            let adet = 0;
-            let match;
-            while ((match = regex.exec(kucukMetin)) !== null) {
-                adet++;
-                if (regex.lastIndex === match.index) regex.lastIndex++;
-            }
-
-            if (adet > 0) {
-                genelToplam += adet;
-                // SADECE DOLU OLANLARI LİSTEYE EKLE
-                bulunanlarListesi.push(kitap);
-                // Sonuçları ekrana basmadan önce hafızada biriktiriyoruz
-                geciciSonuclar.push({ kitap, ad, adet });
-            }
-        } catch (e) { console.error(kitap + " okunamadı."); }
-    }
-
-    // 2. LİSTELEME: Tarama bitti, şimdi sadece dolu kitapları çantaya koyup ekrana basıyoruz
-    const canta = bulunanlarListesi.join(',');
-    
-    geciciSonuclar.forEach((sonuc, index) => {
-        document.getElementById('sonucDökümü').innerHTML += `
-            <div class="satir" onclick="window.location.href='bul.html?kitap=${sonuc.kitap}&ara=${encodeURIComponent(girdi)}&sira=${index}&liste=${canta}'">
-                <div>
-                    <div style="font-weight:bold">${sonuc.ad}</div>
-                    <div class="detay-yazi">"${girdi}" tam kalıbı bulundu</div>
-                </div>
-                <span class="sayi">${sonuc.adet}</span>
-            </div>`;
-    });
-
-    document.getElementById('bilgi').innerText = `Ardışık Tarama Bitti. Toplam: ${genelToplam}`;
-}
-
-
-
-
-
-// ==========================================
-// 3. ARDIŞIK ARAMA BİTİŞ
-// ==========================================
-
-</script>
-<script src="kapatbutonu.js"></script>
 </body>
 </html>

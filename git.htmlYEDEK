@@ -8,12 +8,14 @@
         body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #1a1a1a; width: 100vw; position: relative; }
         iframe { width: 100%; height: 100vh; border: none; background: white; display: block; }
         
+        /* ANA SAYFAYA DÖNÜŞ BUTONU (KIRMIZI ÇARPI) */
         .ust-kapat-btn {
             position: fixed;
-            top: 20px;      
-            right: 20px;     
+            top: 145px;      
+            right: 45px;     
             width: 45px;     
             height: 45px;    
+            transform: translateY(50%);
             z-index: 99999999;
             background: #d93025; 
             color: white;
@@ -27,7 +29,9 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
+            line-height: 0;
         }
+        .ust-kapat-btn:hover { background: #b71c1c; }
     </style>
 </head>
 <body>
@@ -50,37 +54,26 @@
             
             iframe.onload = function() {
                 const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+                // KİTABIN İÇİNDEKİ TÜM PANEL VE BUTONLARI BOĞAN STİL
                 const stil = doc.createElement('style');
-                
-                // --- TELEFON İÇİN SIFIRLANMIŞ KENAR AYARLARI ---
                 stil.innerHTML = `
-                    body { 
-                        font-size: 20px !important; 
-                        line-height: 1.6 !important; 
-                        /* Üstten 60px (Çarpı için), Yanlardan SADECE 5px (Tam yayılma) */
-                        padding: 60px 5px 20px 5px !important; 
-                        background-color: white !important; 
-                        margin: 0 !important;
-                        text-align: justify; 
-                        word-wrap: break-word;
-                    }
+                    body { font-size: 22px !important; line-height: 1.7 !important; padding: 20px !important; background-color: white !important; }
                     
-                    /* Kitap içindeki her şeyi ekran genişliğine zorla */
-                    div, p, span, section, article { 
-                        width: 100% !important;
-                        max-width: 100% !important;
-                        margin: 0 !important;
-                        padding-left: 0 !important;
-                        padding-right: 0 !important;
-                        visibility: visible !important; 
-                        opacity: 1 !important;
-                    }
-
-                    /* Gereksiz her şeyi gizle */
-                    [class*="settings"], [id*="settings"], [class*="menu"], [id*="menu"], button { 
+                    /* GÖRSELDEKİ TÜM AYAR PANELİNİ, BUTONLARI VE ÇARKI SİLEN KISIM */
+                    [class*="settings"], [id*="settings"], 
+                    [class*="menu"], [id*="menu"],
+                    [class*="panel"], [id*="panel"],
+                    .settings-btn, .gear-icon, .close-btn, button, 
+                    #nav-bar, .top-bar, .bottom-bar { 
                         display: none !important; 
+                        visibility: hidden !important; 
+                        opacity: 0 !important; 
+                        pointer-events: none !important; 
                     }
 
+                    /* METNİN DÜZGÜN GÖRÜNMESİNİ SAĞLAR */
+                    div, p, span { visibility: visible !important; opacity: 1 !important; }
                     mark { background: #ffeb3b !important; color: black !important; font-weight: bold; border-radius: 4px; padding: 0 2px; }
                 `;
                 doc.head.appendChild(stil);
@@ -100,6 +93,7 @@
 
                     doc.body.innerHTML = oncesi + parca + sonrasi;
 
+                    // HEDEF KELİMEYE ODAKLANMA
                     setTimeout(() => {
                         const hedef = doc.getElementById('HEDEF_OK');
                         if (hedef) {
