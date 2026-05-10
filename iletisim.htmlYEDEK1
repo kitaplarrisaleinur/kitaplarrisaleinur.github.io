@@ -11,10 +11,9 @@
     </script>
 
     <style>
-        /* 1. DEĞİŞİKLİK: Sayfa en üstten başlasın dedik */
-        body { font-family: sans-serif; background: #1a1a1a; color: white; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 40px 15px; box-sizing: border-box; }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; }
         .paneli { background: #2c3e50; padding: 25px; border-radius: 20px; border: 2px solid #e67e22; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { color: #e67e22; margin-top: 0; margin-bottom: 20px; }
+        h2 { color: #e67e22; margin-top: 0; }
         input, textarea { width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 16px; box-sizing: border-box; outline: none; background: #f9f9f9; color: #333; margin-bottom: 12px; font-family: sans-serif; }
         textarea { height: 130px; resize: none; }
         .gonder-btn { background: #e67e22; color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: not-allowed; font-size: 18px; opacity: 0.3; pointer-events: none; transition: 0.3s; }
@@ -30,13 +29,11 @@
     
     <form action="https://formspree.io/f/maqvlprg" method="POST">
         
-        <!-- ÇÖZÜM: 'name' kısmını '_subject' yaptık. Gmail başlığı buradan alacak. -->
-        <input type="text" name="_subject" id="konu_kutusu" placeholder="Mesajın Konusu (Zorunlu)" required>
+        <!-- SIRA NUMARASI VE ZAMAN İÇİN GİZLİ ETİKET (İSKELETİ BOZMAZ) -->
+        <input type="hidden" name="Mesaj_Kimligi" id="mesaj_id">
 
-        <!-- Diğer kutular isteğe bağlı -->
-        <input type="text" name="isim_rumuz" placeholder="Adınız / Rumuz (İsteğe Bağlı)">
+        <input type="text" name="isim_rumuz" placeholder="Adınız, Rumuz veya Konu (İsteğe Bağlı)">
         <input type="email" name="email" placeholder="E-posta Adresiniz (İsteğe Bağlı)">
-        
         <textarea name="message" id="mektup" placeholder="Mesajınızı buraya yazın..." required oninput="kontrolEt()"></textarea>
         
         <div class="sayac" id="karakter">0 / 500 harf (En az 20)</div>
@@ -51,10 +48,23 @@
     const mektupKutusu = document.getElementById('mektup');
     const gonderBtn = document.getElementById('btnGonder');
     const sayacElemani = document.getElementById('karakter');
+    const mesajIdKutusu = document.getElementById('mesaj_id');
 
     mektupKutusu.maxLength = UST_SINIR;
 
+    // OTOMATİK ZAMAN DAMGASI OLUŞTURUCU
+    // E-postanın en başında "Mesaj_Kimligi: 10.05.2026-15:45:22" şeklinde görünür.
+    function kimlikOlustur() {
+        const simdi = new Date();
+        const tarih = simdi.toLocaleDateString('tr-TR').replace(/\./g, '-');
+        const saat = simdi.toLocaleTimeString('tr-TR');
+        mesajIdKutusu.value = tarih + "_" + saat;
+    }
+    // Sayfa açılır açılmaz ve her harf yazıldığında kimliği tazele
+    kimlikOlustur();
+
     function kontrolEt() {
+        kimlikOlustur(); // Her yazımda saniyeyi günceller ki gönderildiği anı tam yakalasın
         const uzunluk = mektupKutusu.value.length;
         sayacElemani.innerText = uzunluk + " / " + UST_SINIR + " harf" + (uzunluk < ALT_SINIR ? " (En az " + ALT_SINIR + ")" : "");
         
