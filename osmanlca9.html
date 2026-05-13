@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ota" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Risale-i Nur - Hüsrev Hattı Düzeni</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --satir-yuksekligi: 45px; /* Satır aralığını buradan hassas ayarlayabilirsin */
+            --sayfa-genislik: 800px;
+        }
+
+        body {
+            background-color: #e0e0e0;
+            font-family: 'Amiri', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .sayfa {
+            background: white;
+            width: var(--sayfa-genislik);
+            height: calc(var(--satir-yuksekligi) * 23 + 40px); /* 23 satır tam sığacak yükseklik */
+            padding: 30px 50px;
+            margin-bottom: 50px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            position: relative;
+            box-sizing: border-box;
+            border: 1px solid #d1b894; /* Hafif bir çerçeve */
+        }
+
+        /* 1. Satır: Serlevha (Kitap ismi ve Sayfa No) */
+        .serlevha {
+            display: flex;
+            justify-content: space-between;
+            height: var(--satir-yuksekligi);
+            border-bottom: 1px double #d1b894;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* 22 Satırlık Ana Metin Alanı */
+        .metin-alani {
+            margin-top: 10px;
+            line-height: var(--satir-yuksekligi);
+            font-size: 1.4em;
+            text-align: justify;
+            text-justify: inter-word; /* Senin eşitleme kodunun temel mantığı */
+        }
+
+        /* Kısa satırları (Besmele vs.) ortalamak için bu sınıfı kullanabilirsin */
+        .orta {
+            text-align: center;
+            display: block;
+        }
+
+        @media print {
+            body { background: none; }
+            .sayfa { margin: 0; box-shadow: none; page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. SAYFA BAŞLANGICI -->
+    <div class="sayfa">
+        <div class="serlevha">
+            <span>Sözler</span>
+            <span>1</span> <!-- Sayfa Numarası -->
+        </div>
+
+        <div class="metin-alani">
+            <span class="orta">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ</span><br>
+            بِسْمِ اللّٰهِ كُلِّ خَيْرٍ بَاشِي دِر. بزم داهي باشده اونا باشلارز.
+            بيل اي نفسیم! شو مبارك كلمه، اسلام<br>
+             نشانى اولديغى گبى...<br>
+            <!-- Buraya el yazmasındaki gibi tam 22 satır gelecek -->
+            <!-- Her satırın sonuna <br> koyarak nizamı koruyabilirsin -->
+        </div>
+    </div>
+
+    <!-- 2. SAYFA BAŞLANGICI (Yeni sayfa eklemek için bu bloğu kopyala) -->
+    <div class="sayfa">
+        <div class="serlevha">
+            <span>Sözler</span>
+            <span>2</span>
+        </div>
+        <div class="metin-alani">
+            İkinci sayfanın ilk satırı buradan devam ediyor...<br>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        body { background-color: #f4f1ea; padding: 40px; }
+        .risale-sayfa {
+            width: 950px; 
+            margin: auto;
+            background: white;
+            padding: 40px;
+            font-family: 'Amiri', serif;
+            font-size: 32px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .satir {
+            display: block;
+            white-space: nowrap;
+            line-height: 2.3;
+            margin-bottom: 5px;
+            transform-origin: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="risale-sayfa" id="kutu">
+    <div class="satir">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحٖیمِ وَبِهٖ نَسْتَعٖینُ</div>
+    <div class="satir">[اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمٖینَ وَالصَّلَاةُ وَالصَّلَامُ عَلٰی سَیِّدِنَا مُحَمَّدٍ وَعَلٰٓی اٰلِهٖ وَصَحْبِهٖٓ اَجْمَعٖینَ]</div>
+    <div class="satir">ای قرداش! بندن برقاچ نصیحت ایستەدڭ. سن بر عسكر اولدیغڭ ایچون عسكرلك تمثیلاتیلە، سكز</div>
+    <div class="satir">حكایەجكلر ایلە برقاچ حقیقتی نفسملە برابر دیڭلە. چونكە بن نفسمی هركسدن زیادە نصیحتە محتاج</div>
+    <div class="satir">كورویورم. وقتیلە سكز آیتدن استفادە ایتدیگم (سكز سوزی) براز اوزونجە نفسمە دیمشدم.</div>
+    <div class="satir">شیمدی قیصەجە و عوام لسانیلە نفسمە دییەجگم. كیم ایسترسە برابر دیڭلەسین.</div>
+    <div class="satir" style="text-align:center; font-weight:bold;">[برنجی سوز]</div>
+    <div class="satir">بسم اللّٰه هر خیرڭ باشیدر. بز دخی باشدە اوڭا باشلارz. بیل ای نفسم! شو مبارك كلمە اسلام</div>
+    <div class="satir">نشانی اولدیغی كبی، بتون موجوداتڭ لسان حالیلە ورد زبانیدر . بسم اللّٰه نە بیوك توكنمز بر قوّت،</div>
+    <div class="satir">نە چوق بیتmez بر بركت اولدیغنی آڭلامق ایسترسەڭ، شو تمثیلی حكایەجگە باق، دیڭلە، شویلەكە:</div>
+</div>
+
+<script>
+    window.onload = function() {
+        const hedef = 950;
+        document.querySelectorAll('.satir').forEach(s => {
+            const genislik = s.scrollWidth;
+            if (genislik > hedef * 0.6) {
+                const oran = hedef / genislik;
+                s.style.transform = `scaleX(${oran})`;
+                s.style.width = hedef + "px";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
