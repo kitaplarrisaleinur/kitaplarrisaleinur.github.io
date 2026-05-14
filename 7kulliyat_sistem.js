@@ -137,3 +137,4 @@ window.addEventListener('load', function() {
     if(geceModuAcik) temaUygula(true);
     if(fontOran !== 1.0) setTimeout(() => boyutlandir(1), 100);
 });
+
