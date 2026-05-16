@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', function() {
     
-    // Genişliği 280px, buton yükseklikleri 54px yapılan ve yazıları büyütülen menü yapısı
+    // Genişliği 280px, buton yükseklikleri 54px yapılan orijinal menü yapınız
     const menuHTML = `
         <!-- 1. GENİŞLİĞİ 280PX OLARAK AYARLANAN ANA KUTU -->
         <div id="ayar-menusu" style="position:fixed; bottom:85px; right:25px; display:none; flex-direction:column; gap:10px; z-index:999999998; background:white; padding:15px; border-radius:15px; box-shadow:0 8px 25px rgba(0,0,0,0.2); width:280px; max-width:280px; box-sizing:border-box; font-family:sans-serif; border:1px solid #ddd;">
@@ -57,87 +57,29 @@ window.addEventListener('DOMContentLoaded', function() {
     };
 
     // ================================================================
-    // TÜMÜNÜ AÇ BUTONU İLİŞKİLENDİRME
+    // AYARLARI SIFIRLA FONKSİYONU
+    // Sayfadaki tüm kilitleri kaldırır, hafızayı uçurur.
     // ================================================================
-    document.getElementById('tumunuAcBtn').onclick = function() {
-        document.querySelectorAll('details').forEach(function(kitapBolumu) {
-            kitapBolumu.open = true;
-        });
+    document.getElementById('sifirlaBtn').onclick = function() {
+        localStorage.clear();
+        document.body.style.backgroundColor = "";
+        document.body.style.color = "";
+        document.getElementById('sayfaNoInput').value = "";
     };
 
     // ================================================================
-    // DARALT BUTONU İLİŞKİLENDİRME
-    // ================================================================
-    document.getElementById('daraltBtn').onclick = function() {
-        document.querySelectorAll('details').forEach(function(kitapBolumu) {
-            kitapBolumu.open = false;
-        });
-    };
-
-  
-       // ================================================================
-    // FONT BOYUTLANDIRMA SİSTEMİ (Buton Tetiklemeli Dosya Bağlantısı)
-    // ================================================================
-    function fontDosyasiniCagir() {
-        // Eğer dosya zaten sayfaya eklenmişse tekrar eklemesin diye kontrol ediyoruz
-        if (!document.querySelector('script[src="9fontbuyukluk.js"]')) {
-            const fontScript = document.createElement('script');
-            fontScript.src = '9fontbuyukluk.js';
-            document.body.appendChild(fontScript);
-        }
-    }
-
-    // A+ butonuna basıldığında harici dosyayı çağırır ve devreye sokar
-    document.getElementById('fontArtiBtn').addEventListener('click', fontDosyasiniCagir);
-
-    // A- butonuna basıldığında harici dosyayı çağırır ve devreye sokar
-    document.getElementById('fontEksiBtn').addEventListener('click', fontDosyasiniCagir);
-
-
-    // ================================================================
-    // SAYFAYA GİT BUTONU FONKSİYONU (Büyük Harfe Kesin Duyarlı)
-    // Cümle içindeki küçük "sayfa" yazılarını eler, sadece büyük "SAYFA [No]" başlıklarına gider.
-    // ================================================================
-    document.getElementById('sayfaGitButonumuz').onclick = function() {
-        const arananSayfaNo = document.getElementById('sayfaNoInput').value.trim();
-        if (arananSayfaNo) {
-            const tumSayfaEtiketleri = document.querySelectorAll('.sayfa');
-            
-            // Büyük harflerle "SAYFA 15" kalıbını oluşturuyoruz (Harf duyarlılığı aktiftir)
-            const aranacakKesinKalip = "SAYFA " + arananSayfaNo;
-
-            const hedefSayfa = Array.from(tumSayfaEtiketleri).find(function(el) {
-                // el.textContent içinde tam olarak "SAYFA X" yazıp yazmadığını kontrol eder
-                return el.textContent.includes(aranacakKesinKalip);
-            });
-            
-            if (hedefSayfa) {
-                // Ekranı tam o büyük harfli sayfa başlığının olduğu yere yumuşakça kaydırır
-                hedefSayfa.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-    };
-
-       // ================================================================
-    // AYARLARI SIFIRLA SİSTEMİ (Buton Tetiklemeli Dosya Bağlantısı)
-    // ================================================================
-    function sıfırlaDosyasiniCagir() {
-        if (!document.querySelector('script[src="10sifirla.js"]')) {
-            const sifirlaScript = document.createElement('script');
-            sifirlaScript.src = '10sifirla.js';
-            document.body.appendChild(sifirlaScript);
-        }
-    }
-
-    // Sıfırla butonuna basıldığında harici dosyayı çağırır ve devreye sokar
-    document.getElementById('sifirlaBtn').addEventListener('click', sıfırlaDosyasiniCagir);
-
-
-    // ================================================================
-    // TEMALAR DOSYASI BAĞLANTISI
+    // BAĞLANTI KÖPRÜLERİ (Tamamen Bağımsız Dosya Çağrıları)
     // ================================================================
     const temaScript = document.createElement('script');
     temaScript.src = '8temalar.js';
     document.body.appendChild(temaScript);
+
+    const acKapatScript = document.createElement('script');
+    acKapatScript.src = '8ackapat.js';
+    document.body.appendChild(acKapatScript);
+
+    const gitScript = document.createElement('script');
+    gitScript.src = '9sayfayagit.js';
+    document.body.appendChild(gitScript);
 
 });

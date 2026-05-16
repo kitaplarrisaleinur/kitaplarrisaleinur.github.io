@@ -74,25 +74,31 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     };
 
-  
-       // ================================================================
-    // FONT BOYUTLANDIRMA SİSTEMİ (Buton Tetiklemeli Dosya Bağlantısı)
     // ================================================================
-    function fontDosyasiniCagir() {
-        // Eğer dosya zaten sayfaya eklenmişse tekrar eklemesin diye kontrol ediyoruz
-        if (!document.querySelector('script[src="9fontbuyukluk.js"]')) {
-            const fontScript = document.createElement('script');
-            fontScript.src = '9fontbuyukluk.js';
-            document.body.appendChild(fontScript);
-        }
+    // FONT BOYUTLANDIRMA SİSTEMİ (CSS Seçicilerine Tam Uyumlu)
+    // ================================================================
+    let guncelFontOrani = 100; 
+
+    function fontuUygula(oran) {
+        const hedefMetinler = document.querySelectorAll('.arabi, .arabi3, details, summary, .lahika, .elifler, .sayfa, .red, .hasiye, .hasiyerenk');
+        hedefMetinler.forEach(function(eleman) {
+            eleman.style.fontSize = oran + '%';
+        });
     }
 
-    // A+ butonuna basıldığında harici dosyayı çağırır ve devreye sokar
-    document.getElementById('fontArtiBtn').addEventListener('click', fontDosyasiniCagir);
+    document.getElementById('fontArtiBtn').onclick = function() {
+        if (guncelFontOrani < 160) { 
+            guncelFontOrani += 10;
+            fontuUygula(guncelFontOrani);
+        }
+    };
 
-    // A- butonuna basıldığında harici dosyayı çağırır ve devreye sokar
-    document.getElementById('fontEksiBtn').addEventListener('click', fontDosyasiniCagir);
-
+    document.getElementById('fontEksiBtn').onclick = function() {
+        if (guncelFontOrani > 70) { 
+            guncelFontOrani -= 10;
+            fontuUygula(guncelFontOrani);
+        }
+    };
 
     // ================================================================
     // SAYFAYA GİT BUTONU FONKSİYONU (Büyük Harfe Kesin Duyarlı)
@@ -118,20 +124,22 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-       // ================================================================
-    // AYARLARI SIFIRLA SİSTEMİ (Buton Tetiklemeli Dosya Bağlantısı)
     // ================================================================
-    function sıfırlaDosyasiniCagir() {
-        if (!document.querySelector('script[src="10sifirla.js"]')) {
-            const sifirlaScript = document.createElement('script');
-            sifirlaScript.src = '10sifirla.js';
-            document.body.appendChild(sifirlaScript);
-        }
-    }
+    // AYARLARI SIFIRLA FONKSİYONU
+    // ================================================================
+    document.getElementById('sifirlaBtn').onclick = function() {
+        localStorage.clear();
+        guncelFontOrani = 100; 
+        
+        const hedefMetinler = document.querySelectorAll('.arabi, .arabi3, details, summary, .lahika, .elifler, .sayfa, .red, .hasiye, .hasiyerenk');
+        hedefMetinler.forEach(function(eleman) {
+            eleman.style.fontSize = ""; 
+        });
 
-    // Sıfırla butonuna basıldığında harici dosyayı çağırır ve devreye sokar
-    document.getElementById('sifirlaBtn').addEventListener('click', sıfırlaDosyasiniCagir);
-
+        document.body.style.backgroundColor = "";
+        document.body.style.color = "";
+        document.getElementById('sayfaNoInput').value = "";
+    };
 
     // ================================================================
     // TEMALAR DOSYASI BAĞLANTISI

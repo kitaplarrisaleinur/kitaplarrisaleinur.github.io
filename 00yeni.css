@@ -51,7 +51,10 @@ body {
   text-align: center;
   padding: 13px 5px;
   line-height: 2.5;
-  background: #dfe1e3;
+  background: #f9fafb;
+  /*background: #dfe1e3;*/
+  margin-bottom: -19px; /* İKİ SPAN ARASINDAKİ BOŞLUĞU KAPATAN EKSİK AYAR */
+
 }
 
 .arabi3 {
@@ -63,7 +66,10 @@ body {
   text-align: center;
   padding: 13px 5px;
   line-height: 2.5;
-  background: #dfe1e3;
+  background: #f9fafb;
+  /*background: #dfe1e3;*/
+  margin-bottom: -19px; /* İKİ SPAN ARASINDAKİ BOŞLUĞU KAPATAN EKSİK AYAR */
+
 }
 
 /* ============================================================
@@ -106,15 +112,15 @@ details {
     font-family: 'Arimo', sans-serif;
     font-size: 1.3rem;
     text-align: center;
-  /*  background: #f9fafb;*/
-  background: #dfe1e3;
+  background: #f9fafb;
+  /*background: #dfe1e3;*/
 }
 
 summary {
     display: block;
     width: 100%;
     font-family: 'Arimo', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 800;
     text-align: center;
     list-style: none;
@@ -123,17 +129,17 @@ summary {
 }
 
 /* Katmanlı Renk Geçişleri */
-details > summary { background: #153D58; color: #ffffff; padding: 10px 4px; }
-details > details > summary { background: #1F5B83; color: #ffffff; padding: 8px 4px; }
-details > details > details > summary { background: #2A7AAF; color: #111827; padding: 6px 4px; }
-details > details > details > details > summary { background: #3498DB; color: #111827; padding: 5px 4px; }
-details > details > details > details > details > summary { background: #3EB6FF; color: #111827; padding: 4px 4px; }
+details > summary { background: #6b7280; color: #ffffff; padding: 5px 4px; }
+details > details > summary { background: #9ca3af; color: #ffffff; padding: 4px 4px; }
+details > details > details > summary { background: #d1d5db; color: #111827; padding: 4px 4px; }
+details > details > details > details > summary { background: #e5e7eb; color: #111827; padding: 4px 4px; }
+details > details > details > details > details > summary { background: #f3f4f6; color: #111827; padding: 4px 4px; }
 
 .lahika{
   display: block;
     width: 100%;
     font-family: 'Arimo', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 800;
     text-align: center;
     list-style: none;
